@@ -1,0 +1,211 @@
+/* ===== 成长任务页 ===== */
+.head {
+  padding: 0;
+}
+
+.progress-card {
+  margin-top: 24rpx;
+  padding: 30rpx 32rpx 26rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.045);
+}
+
+.pc-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.pc-label {
+  font-size: 22rpx;
+  color: #93a29c;
+}
+
+.pc-num {
+  margin-top: 10rpx;
+  font-size: 52rpx;
+  font-weight: 800;
+  line-height: 1;
+  color: #17211e;
+}
+
+.pc-total {
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #b3bfba;
+}
+
+.pc-right {
+  text-align: right;
+}
+
+.pc-growth {
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1;
+  color: #12a97f;
+}
+
+.pc-growth-label {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #a3b0ab;
+}
+
+.pc-bar {
+  margin-top: 24rpx;
+  height: 14rpx;
+  border-radius: 8rpx;
+  background: #eef4f1;
+  overflow: hidden;
+}
+
+.pc-fill {
+  height: 100%;
+  border-radius: 8rpx;
+  background: linear-gradient(90deg, #35d2aa, #12a97f);
+  transition: width 0.45s ease;
+}
+
+.pc-tip {
+  margin-top: 16rpx;
+  font-size: 21rpx;
+  color: #a3b0ab;
+}
+
+/* 能力筛选 */
+.chips {
+  margin: 28rpx 0 6rpx;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.chip {
+  display: inline-block;
+  padding: 12rpx 26rpx;
+  margin-right: 16rpx;
+  border-radius: 26rpx;
+  background: #ffffff;
+  color: #6b7a75;
+  font-size: 24rpx;
+  border: 1rpx solid #eef3f1;
+}
+
+.chip.on {
+  background: #12a97f;
+  border-color: #12a97f;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 任务卡 */
+.task-list {
+  margin-top: 22rpx;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  padding: 26rpx 28rpx;
+  margin-bottom: 20rpx;
+  border-radius: 26rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(21, 88, 68, 0.04);
+}
+
+.task.is-done {
+  background: #f7faf9;
+  box-shadow: none;
+}
+
+.task-ico {
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.task-emoji {
+  line-height: 1;
+}
+
+.task-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 20rpx;
+}
+
+.task-title {
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #17211e;
+}
+
+.is-done .task-title {
+  color: #9daaa5;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  margin-top: 10rpx;
+  font-size: 20rpx;
+  color: #a3b0ab;
+}
+
+.tag {
+  padding: 2rpx 12rpx;
+  border-radius: 8rpx;
+  font-size: 19rpx;
+  margin-right: 4rpx;
+}
+
+.dot {
+  margin: 0 8rpx;
+  color: #d2dcd8;
+}
+
+.task-action {
+  flex-shrink: 0;
+  padding: 12rpx 20rpx;
+  border-radius: 22rpx;
+  background: #e9f8f2;
+  color: #12a97f;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.task-action.done {
+  background: #f1f5f3;
+  color: #a9b6b1;
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.empty {
+  padding: 80rpx 0;
+  text-align: center;
+  font-size: 24rpx;
+  color: #a3b0ab;
+}
+
+.refresh {
+  margin: 36rpx auto 0;
+  width: 320rpx;
+  height: 80rpx;
+  line-height: 76rpx;
+  font-size: 26rpx;
+}
+
+.foot-note {
+  margin-top: 20rpx;
+  text-align: center;
+  font-size: 20rpx;
+  color: #b6c1bd;
+}

@@ -1,0 +1,45 @@
+<!-- 任务完成 -->
+<view class="mask" wx:if="{{mode === 'task'}}" bindtap="onTaskClose">
+  <view class="sheet" catchtap="noop">
+    <view class="halo"></view>
+    <view class="kicker">任务完成</view>
+    <view class="emoji">✨</view>
+    <view class="growth">+{{task.growth}}</view>
+    <view class="unit">成长值</view>
+    <view class="line">「{{task.title}}」已完成</view>
+
+    <view class="tags">
+      <view class="tag">{{task.abilityName}} 经验 +{{task.growth}}</view>
+      <view class="tag mint" wx:if="{{task.levelUp}}">等级提升 · Lv.{{task.level}}</view>
+      <view class="tag mint" wx:if="{{task.allDone}}">今日任务全部完成</view>
+      <view class="tag gold" wx:for="{{task.badges}}" wx:key="id">解锁徽章「{{item.name}}」</view>
+    </view>
+
+    <view class="btn" bindtap="onTaskClose">{{ability ? '查看能力升级' : '继续进化'}}</view>
+  </view>
+</view>
+
+<!-- 能力升级 -->
+<view class="mask" wx:if="{{mode === 'ability'}}" bindtap="onAbilityClose">
+  <view class="sheet" catchtap="noop">
+    <view class="halo ability-halo" style="background:{{ability.color}}"></view>
+    <view class="kicker">能力升级</view>
+    <view class="badge" style="background:{{ability.bg}}">
+      <text class="badge-emoji">{{ability.emoji}}</text>
+    </view>
+    <view class="ability-name">{{ability.name}}</view>
+    <view class="levels">
+      <text class="from">Lv.{{ability.fromLevel}}</text>
+      <text class="arrow">→</text>
+      <text class="to" style="color:{{ability.color}}">Lv.{{ability.level}}</text>
+    </view>
+
+    <view class="exp-bar">
+      <view class="exp-fill" style="width:{{ability.exp}}%;background:{{ability.color}}"></view>
+    </view>
+    <view class="exp-text">当前经验 {{ability.exp}} / 100</view>
+    <view class="advice">{{ability.advice}}</view>
+
+    <view class="btn" bindtap="onAbilityClose">继续进化</view>
+  </view>
+</view>

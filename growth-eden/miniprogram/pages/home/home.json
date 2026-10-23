@@ -1,0 +1,10 @@
+{
+  "navigationBarBackgroundColor": "#3FCFAB",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#3FCFAB",
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "page-shell": "/components/page-shell/index",
+    "reward-popups": "/components/reward-popups/index"
+  }
+}

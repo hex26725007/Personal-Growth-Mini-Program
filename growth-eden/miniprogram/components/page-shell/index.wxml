@@ -1,0 +1,7 @@
+<view class="page-bg"></view>
+<view class="shell" style="padding-top: {{pad}}px">
+  <view class="head" wx:if="{{title}}" style="padding-right: {{titleRight}}px">
+    <view class="page-title">{{title}}</view>
+  </view>
+  <slot />
+</view>

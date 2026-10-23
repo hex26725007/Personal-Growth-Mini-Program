@@ -1,0 +1,41 @@
+.page-bg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #3fcfab 0%,
+    #7adfc4 34%,
+    #dff6ef 50%,
+    #ffffff 64%,
+    #ffffff 100%
+  );
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  padding-right: 32rpx;
+  padding-bottom: 200rpx;
+  padding-left: 32rpx;
+}
+
+.head {
+  padding: 0 0 18rpx;
+  min-height: 64rpx;
+  display: flex;
+  align-items: center;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 1rpx;
+  color: #ffffff;
+  text-shadow: 0 4rpx 12rpx rgba(18, 169, 127, 0.18);
+}

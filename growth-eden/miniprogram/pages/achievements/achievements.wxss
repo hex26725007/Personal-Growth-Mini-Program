@@ -1,0 +1,287 @@
+/* ===== 成就徽章 ===== */
+.head {
+  padding: 0;
+}
+
+.collect-card {
+  margin-top: 24rpx;
+  padding: 30rpx 32rpx 26rpx;
+  border-radius: 28rpx;
+  background: linear-gradient(135deg, #ffffff 0%, #f4fbf8 100%);
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.05);
+}
+
+.cc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cc-label {
+  font-size: 22rpx;
+  color: #93a29c;
+}
+
+.cc-num {
+  margin-top: 10rpx;
+  font-size: 50rpx;
+  font-weight: 800;
+  line-height: 1;
+  color: #17211e;
+}
+
+.cc-total {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #b3bfba;
+}
+
+.cc-emoji {
+  font-size: 56rpx;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.cc-bar {
+  margin-top: 22rpx;
+  height: 12rpx;
+  border-radius: 6rpx;
+  background: #eef4f1;
+  overflow: hidden;
+}
+
+.cc-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  background: linear-gradient(90deg, #35d2aa, #12a97f);
+  transition: width 0.45s ease;
+}
+
+/* 徽章墙 */
+.wall {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 24rpx;
+  padding: 30rpx 8rpx 4rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.045);
+}
+
+.badge {
+  width: 33.33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.badge-ico {
+  position: relative;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 34rpx;
+  border: 3rpx solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f8f7;
+}
+
+.badge-ico.locked {
+  border-color: #eaf0ed;
+}
+
+.badge-emoji {
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.badge-ico.locked .badge-emoji {
+  opacity: 0.28;
+}
+
+.badge-check {
+  position: absolute;
+  right: -8rpx;
+  bottom: -8rpx;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 3rpx solid #ffffff;
+  color: #ffffff;
+  font-size: 17rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-name {
+  margin-top: 14rpx;
+  font-size: 20rpx;
+  color: #55655f;
+  text-align: center;
+}
+
+.badge-ico.locked + .badge-name {
+  color: #b0bcb7;
+}
+
+/* 里程碑 */
+.mile-sec {
+  margin: 36rpx 0 18rpx;
+}
+
+.sec-hint {
+  font-size: 20rpx;
+  color: #a3b0ab;
+}
+
+.mile-card {
+  padding: 32rpx 28rpx 4rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.045);
+}
+
+.mile {
+  display: flex;
+}
+
+.mile-rail {
+  width: 48rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.mile-dot {
+  width: 26rpx;
+  height: 26rpx;
+  margin-top: 4rpx;
+  border-radius: 50%;
+  border: 3rpx solid #dce7e3;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 15rpx;
+  line-height: 1;
+}
+
+.mile-dot.on {
+  background: #17bf93;
+  border-color: #17bf93;
+}
+
+.mile-line {
+  flex: 1;
+  width: 2rpx;
+  margin-top: 8rpx;
+  background: #edf3f0;
+}
+
+.mile-main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 0 34rpx 14rpx;
+}
+
+.mile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mile-name {
+  font-size: 25rpx;
+  color: #22302b;
+}
+
+.mile-val {
+  font-size: 21rpx;
+  color: #a3b0ab;
+}
+
+.mile-val.on {
+  color: #12a97f;
+  font-weight: 600;
+}
+
+.mile-bar {
+  margin-top: 14rpx;
+  height: 10rpx;
+  border-radius: 5rpx;
+  background: #f2f6f4;
+  overflow: hidden;
+}
+
+.mile-fill {
+  height: 100%;
+  border-radius: 5rpx;
+  background: #b9e6d8;
+  transition: width 0.45s ease;
+}
+
+.mile-fill.on {
+  background: linear-gradient(90deg, #35d2aa, #12a97f);
+}
+
+/* 徽章详情 */
+.d-ico {
+  width: 140rpx;
+  height: 140rpx;
+  margin: 0 auto;
+  border-radius: 44rpx;
+  border: 4rpx solid transparent;
+  background: #f5f8f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.d-ico.locked {
+  border-color: #eaf0ed;
+}
+
+.d-emoji {
+  font-size: 62rpx;
+  line-height: 1;
+}
+
+.d-ico.locked .d-emoji {
+  opacity: 0.3;
+}
+
+.d-name {
+  margin-top: 26rpx;
+  font-size: 36rpx;
+  font-weight: 800;
+  color: #17211e;
+}
+
+.d-state {
+  margin-top: 12rpx;
+  font-size: 21rpx;
+  color: #a3b0ab;
+}
+
+.d-state.on {
+  color: #12a97f;
+}
+
+.d-desc {
+  margin-top: 22rpx;
+  font-size: 24rpx;
+  color: #6b7a75;
+  line-height: 1.6;
+}
+
+.d-btn {
+  margin-top: 36rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+}

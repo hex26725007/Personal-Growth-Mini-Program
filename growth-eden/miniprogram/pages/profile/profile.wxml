@@ -1,0 +1,119 @@
+<page-shell title="我的">
+
+  <!-- 个人档案 -->
+  <view class="profile-card">
+    <view class="avatar">{{avatarChar}}</view>
+    <view class="p-main">
+      <view class="p-name-row">
+        <text class="p-name">{{vm.nickname}}</text>
+        <view class="p-edit" bindtap="onEditName" hover-class="hover-dim">编辑</view>
+      </view>
+      <view class="p-sub">{{vm.levelTitle}} · 加入进化乐园 {{vm.daysActive}} 天</view>
+    </view>
+    <view class="p-lv">Lv.{{vm.level}}</view>
+  </view>
+
+  <!-- 数据统计 -->
+  <view class="stats">
+    <view class="stat">
+      <view class="stat-num">{{vm.totalGrowth}}</view>
+      <view class="stat-label">累计成长值</view>
+    </view>
+    <view class="stat">
+      <view class="stat-num">{{vm.completedCount}}</view>
+      <view class="stat-label">完成任务</view>
+    </view>
+    <view class="stat">
+      <view class="stat-num">{{vm.streak}}</view>
+      <view class="stat-label">连续天数</view>
+    </view>
+    <view class="stat">
+      <view class="stat-num">{{vm.unlockedCount}}</view>
+      <view class="stat-label">解锁徽章</view>
+    </view>
+  </view>
+
+  <view class="stat-foot">
+    <text>最高连击 {{vm.state.bestStreak}} 天</text>
+    <text class="sep">·</text>
+    <text>完美一天 {{vm.perfectDays}} 次</text>
+    <text class="sep">·</text>
+    <text>开始于 {{vm.joinDate}}</text>
+  </view>
+
+  <!-- 近 7 天成长 -->
+  <view class="card chart-card">
+    <view class="sec-head">
+      <text class="sec-title">近 7 天成长</text>
+      <text class="sec-hint">共 {{weekTotal}} 成长值</text>
+    </view>
+    <view class="chart">
+      <view class="bar-col" wx:for="{{vm.weekBars}}" wx:key="date">
+        <view class="bar-wrap">
+          <view class="bar {{item.today ? 'on' : ''}}" style="height:{{item.height}}%"></view>
+        </view>
+        <text class="bar-label {{item.today ? 'on' : ''}}">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置 -->
+  <view class="card list">
+    <view class="row">
+      <view class="row-left">
+        <text class="row-ico ico-inline">⏰</text>
+        <text class="row-title">每日提醒</text>
+      </view>
+      <switch checked="{{vm.settings.remind}}" color="#17BF93" bindchange="onRemind" />
+    </view>
+
+    <picker mode="time" value="{{vm.settings.remindTime}}" bindchange="onTimeChange">
+      <view class="row">
+        <view class="row-left">
+          <text class="row-ico ico-inline">🕗</text>
+          <text class="row-title">提醒时间</text>
+        </view>
+        <view class="row-right">
+          <text class="row-val">{{vm.settings.remindTime}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </picker>
+
+    <view class="row" bindtap="onSync" hover-class="hover-dim">
+      <view class="row-left">
+        <text class="row-ico ico-inline">☁️</text>
+        <text class="row-title">云端同步</text>
+      </view>
+      <view class="row-right">
+        <view class="sync-dot {{syncClass}}"></view>
+        <text class="row-val">{{syncText}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="row" bindtap="onAbout" hover-class="hover-dim">
+      <view class="row-left">
+        <text class="row-ico ico-inline">🌿</text>
+        <text class="row-title">关于进化乐园</text>
+      </view>
+      <view class="row-right">
+        <text class="row-val">v0.1 MVP</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="row last" bindtap="onReset" hover-class="hover-dim">
+      <view class="row-left">
+        <text class="row-ico ico-inline">🧪</text>
+        <text class="row-title">重置为示例数据</text>
+      </view>
+      <view class="row-right">
+        <text class="arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="version">个人成长进化乐园 · MVP 0.1</view>
+
+</page-shell>

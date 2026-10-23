@@ -1,0 +1,84 @@
+<page-shell title="成就徽章">
+
+  <!-- 收集进度 -->
+  <view class="collect-card">
+    <view class="cc-row">
+      <view>
+        <view class="cc-label">徽章收集进度</view>
+        <view class="cc-num">{{vm.unlockedCount}}<text class="cc-total"> / {{vm.badgeTotal}}</text></view>
+      </view>
+      <view class="cc-emoji">🏅</view>
+    </view>
+    <view class="cc-bar">
+      <view class="cc-fill" style="width:{{collectPercent}}%"></view>
+    </view>
+  </view>
+
+  <!-- 徽章墙 -->
+  <view class="wall">
+    <view
+      class="badge"
+      wx:for="{{badgeList}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onBadge"
+      hover-class="hover-dim"
+    >
+      <view
+        class="badge-ico {{item.unlocked ? 'on' : 'locked'}}"
+        style="{{item.unlocked ? 'background:' + item.tint + ';border-color:' + item.color : ''}}"
+      >
+        <text class="badge-emoji">{{item.emoji}}</text>
+        <view class="badge-check" wx:if="{{item.unlocked}}" style="background:{{item.color}}">✓</view>
+      </view>
+      <text class="badge-name">{{item.name}}</text>
+    </view>
+  </view>
+
+  <!-- 里程碑 -->
+  <view class="sec-head mile-sec">
+    <text class="sec-title">里程碑</text>
+    <text class="sec-hint">再往前一点就解锁</text>
+  </view>
+
+  <view class="mile-card">
+    <view class="mile" wx:for="{{milestones}}" wx:key="name">
+      <view class="mile-rail">
+        <view class="mile-dot {{item.done ? 'on' : ''}}">
+          <text wx:if="{{item.done}}">✓</text>
+        </view>
+        <view class="mile-line" wx:if="{{index !== milestones.length - 1}}"></view>
+      </view>
+      <view class="mile-main">
+        <view class="mile-row">
+          <text class="mile-name">{{item.name}}</text>
+          <text class="mile-val {{item.done ? 'on' : ''}}">{{item.cur}} / {{item.target}}</text>
+        </view>
+        <view class="mile-bar">
+          <view class="mile-fill {{item.done ? 'on' : ''}}" style="width:{{item.percent}}%"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</page-shell>
+
+<!-- 徽章详情 -->
+<view class="mask" wx:if="{{detail}}" bindtap="closeDetail">
+  <view class="sheet" catchtap="noop">
+    <view
+      class="d-ico {{detail.unlocked ? 'on' : 'locked'}}"
+      style="{{detail.unlocked ? 'background:' + detail.tint + ';border-color:' + detail.color : ''}}"
+    >
+      <text class="d-emoji">{{detail.emoji}}</text>
+    </view>
+    <view class="d-name">{{detail.name}}</view>
+    <view class="d-state {{detail.unlocked ? 'on' : ''}}">
+      {{detail.unlocked ? '已解锁 · ' + detail.date : '尚未解锁'}}
+    </view>
+    <view class="d-desc">{{detail.desc}}</view>
+    <view class="btn-primary d-btn" bindtap="onDetailAction">
+      {{detail.unlocked ? '收下这枚徽章' : '去做今日任务'}}
+    </view>
+  </view>
+</view>

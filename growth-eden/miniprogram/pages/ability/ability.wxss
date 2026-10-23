@@ -1,0 +1,314 @@
+/* ===== 能力树 ===== */
+.head {
+  padding: 0;
+}
+
+.tree-card {
+  margin-top: 24rpx;
+  padding: 30rpx 0 26rpx;
+  border-radius: 32rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.05);
+  overflow: hidden;
+}
+
+.tree {
+  position: relative;
+  width: 100%;
+  height: 560rpx;
+}
+
+/* 核心 */
+.core {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -64rpx;
+  width: 128rpx;
+}
+
+.core-ring {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #31cfa6, #12a97f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12rpx 26rpx rgba(18, 169, 127, 0.28);
+}
+
+.core-inner {
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.core-lv {
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #12a97f;
+}
+
+.core-label {
+  font-size: 16rpx;
+  color: #9aa8a3;
+  margin-top: 2rpx;
+}
+
+/* 连接线 */
+.line {
+  position: absolute;
+  background: #dbe9e4;
+}
+
+.trunk {
+  left: 342rpx;
+  top: 128rpx;
+  width: 2rpx;
+  height: 62rpx;
+}
+
+.hline {
+  left: 75rpx;
+  top: 190rpx;
+  width: 536rpx;
+  height: 2rpx;
+}
+
+.v {
+  width: 2rpx;
+  height: 30rpx;
+  top: 190rpx;
+}
+
+.v-l1 {
+  left: 74rpx;
+}
+
+.v-l2 {
+  left: 342rpx;
+}
+
+.v-l3 {
+  left: 610rpx;
+}
+
+.r2 {
+  top: 370rpx;
+  height: 30rpx;
+}
+
+/* 能力节点 */
+.node {
+  position: absolute;
+  width: 150rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node-0 {
+  left: 0;
+  top: 220rpx;
+}
+
+.node-1 {
+  left: 50%;
+  margin-left: -75rpx;
+  top: 220rpx;
+}
+
+.node-2 {
+  right: 0;
+  top: 220rpx;
+}
+
+.node-3 {
+  left: 0;
+  top: 400rpx;
+}
+
+.node-4 {
+  left: 50%;
+  margin-left: -75rpx;
+  top: 400rpx;
+}
+
+.node-5 {
+  right: 0;
+  top: 400rpx;
+}
+
+.node-circle {
+  position: relative;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 18rpx rgba(21, 88, 68, 0.08);
+}
+
+.node-emoji {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.node-lv {
+  position: absolute;
+  right: -8rpx;
+  bottom: -6rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 12rpx;
+  font-size: 17rpx;
+  font-weight: 600;
+  color: #ffffff;
+  box-shadow: 0 4rpx 10rpx rgba(21, 88, 68, 0.18);
+}
+
+.node-name {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #55655f;
+}
+
+.tree-foot {
+  display: flex;
+  align-items: center;
+  margin: 10rpx 32rpx 0;
+  padding: 18rpx 22rpx;
+  border-radius: 20rpx;
+  background: #f6fbf9;
+}
+
+.tf-ico {
+  font-size: 24rpx;
+  margin-right: 10rpx;
+}
+
+.tf-text {
+  font-size: 20rpx;
+  color: #7d8d87;
+  line-height: 1.5;
+}
+
+/* 能力详情 */
+.ab-sec {
+  margin: 36rpx 0 18rpx;
+}
+
+.sec-hint {
+  font-size: 20rpx;
+  color: #a3b0ab;
+}
+
+.ab-card {
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-shadow: 0 8rpx 24rpx rgba(21, 88, 68, 0.04);
+}
+
+.ab-top {
+  display: flex;
+  align-items: center;
+}
+
+.ab-ico {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ab-emoji {
+  line-height: 1;
+}
+
+.ab-main {
+  flex: 1;
+  min-width: 0;
+  padding-left: 20rpx;
+}
+
+.ab-name-row {
+  display: flex;
+  align-items: center;
+}
+
+.ab-name {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: #17211e;
+}
+
+.ab-lv {
+  margin-left: 12rpx;
+  padding: 2rpx 12rpx;
+  border-radius: 10rpx;
+  font-size: 18rpx;
+  font-weight: 600;
+}
+
+.ab-desc {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #9aa8a3;
+}
+
+.ab-bar {
+  margin-top: 24rpx;
+  height: 12rpx;
+  border-radius: 6rpx;
+  background: #f1f5f3;
+  overflow: hidden;
+}
+
+.ab-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  transition: width 0.45s ease;
+}
+
+.ab-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12rpx;
+  font-size: 20rpx;
+  color: #a3b0ab;
+}
+
+.ab-advice {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 22rpx;
+  padding: 18rpx 20rpx;
+  border-radius: 18rpx;
+  background: #f7fbf9;
+}
+
+.adv-ico {
+  font-size: 22rpx;
+  margin-right: 10rpx;
+  line-height: 1.4;
+}
+
+.adv-text {
+  flex: 1;
+  font-size: 21rpx;
+  line-height: 1.55;
+  color: #6b7a75;
+}

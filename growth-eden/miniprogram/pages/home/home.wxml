@@ -1,0 +1,101 @@
+<page-shell title="个人成长进化乐园">
+
+  <!-- 个人进化总览 -->
+  <view class="hero rise">
+    <view class="hero-deco hero-deco-1"></view>
+    <view class="hero-deco hero-deco-2"></view>
+
+    <view class="hero-row">
+      <view class="hero-left">
+        <view class="hello">你好，{{vm.nickname}} 🌱</view>
+        <view class="level">当前成长 <text class="lv">Lv.{{vm.level}}</text></view>
+      </view>
+      <view class="hero-right">
+        <view class="pct">{{vm.percent}}%</view>
+        <view class="pct-sub">距离下一级</view>
+      </view>
+    </view>
+
+    <view class="bar">
+      <view class="bar-fill" style="width:{{vm.percent}}%"></view>
+    </view>
+
+    <view class="hero-foot">
+      <text class="foot-k">本周成长值</text>
+      <text class="foot-v">{{vm.weekGrowth}} / {{vm.levelStep}}</text>
+    </view>
+  </view>
+
+  <!-- 今日箴言 -->
+  <view class="card quote">
+    <view class="quote-head">
+      <text class="quote-ico ico-inline">✨</text>
+      <text class="quote-title">今日进化箴言</text>
+    </view>
+    <view class="quote-text">{{vm.quote}}</view>
+    <view class="quote-foot">进化乐园 · {{vm.todayText}}</view>
+  </view>
+
+  <!-- 快速入口 -->
+  <view class="card entries">
+    <view class="sec-head">
+      <text class="sec-title">快速入口</text>
+    </view>
+    <view class="entry-row">
+      <view class="entry entry-task" bindtap="goTasks" hover-class="hover-dim">
+        <text class="entry-emoji ico-entry">📋</text>
+        <text class="entry-label">今日任务</text>
+        <text class="entry-hint">{{remaining > 0 ? remaining + ' 项待完成' : '今天已完成'}}</text>
+        <view class="entry-dot" wx:if="{{remaining > 0}}">{{remaining}}</view>
+      </view>
+      <view class="entry entry-ability" bindtap="goAbility" hover-class="hover-dim">
+        <text class="entry-emoji ico-entry">🌳</text>
+        <text class="entry-label">能力树</text>
+        <text class="entry-hint">Lv.{{vm.level}} 进化中</text>
+      </view>
+      <view class="entry entry-badge" bindtap="goAchievements" hover-class="hover-dim">
+        <text class="entry-emoji ico-entry">🏅</text>
+        <text class="entry-label">成就徽章</text>
+        <text class="entry-hint">{{vm.unlockedCount}}/{{vm.badgeTotal}} 已解锁</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 今日待办 -->
+  <view class="card todo">
+    <view class="sec-head">
+      <text class="sec-title">今日待办</text>
+      <view class="more" bindtap="goTasks" hover-class="hover-dim">查看全部 <text class="arrow">›</text></view>
+    </view>
+
+    <view class="todo-item" wx:for="{{todoPreview}}" wx:key="id">
+      <view class="check {{item.done ? 'on' : ''}}" data-id="{{item.id}}" catchtap="onToggle">
+        <text class="check-ico" wx:if="{{item.done}}">✓</text>
+      </view>
+      <view class="todo-main">
+        <view class="todo-title {{item.done ? 'is-done' : ''}}">{{item.title}}</view>
+        <view class="todo-meta">{{item.abilityName}} · {{item.minutes}} 分钟</view>
+      </view>
+      <view class="todo-growth">+{{item.growth}}<text class="unit">成长值</text></view>
+    </view>
+
+    <view class="todo-empty" wx:if="{{todoPreview.length === 0}}">
+      今天还没有任务，去任务页看看
+    </view>
+  </view>
+
+  <!-- 连续进化 -->
+  <view class="streak">
+    <view class="streak-left">
+      <text class="streak-ico ico-card">🔥</text>
+      <view class="streak-text">
+        <view class="streak-t">连续进化 {{vm.streak}} 天</view>
+        <view class="streak-s">{{streakHint}}</view>
+      </view>
+    </view>
+    <view class="streak-go btn-pill" bindtap="goAchievements">去看看</view>
+  </view>
+
+</page-shell>
+
+<reward-popups id="reward" />

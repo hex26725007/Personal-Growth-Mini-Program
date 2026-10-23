@@ -1,0 +1,32 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/tasks/tasks",
+    "pages/ability/ability",
+    "pages/achievements/achievements",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationStyle": "custom",
+    "navigationBarBackgroundColor": "#3FCFAB",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#3FCFAB"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#93A29C",
+    "selectedColor": "#14B58C",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/tasks/tasks", "text": "成长任务" },
+      { "pagePath": "pages/ability/ability", "text": "能力树" },
+      { "pagePath": "pages/achievements/achievements", "text": "成就徽章" },
+      { "pagePath": "pages/profile/profile", "text": "我的" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

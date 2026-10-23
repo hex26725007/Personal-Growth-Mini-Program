@@ -1,0 +1,84 @@
+<page-shell title="能力进化树">
+
+  <!-- 进化树 -->
+  <view class="tree-card">
+    <view class="tree">
+      <!-- 核心 -->
+      <view class="core" bindtap="goHome">
+        <view class="core-ring">
+          <view class="core-inner">
+            <text class="core-lv">Lv.{{vm.level}}</text>
+            <text class="core-label">进化核心</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 连接线 -->
+      <view class="line trunk"></view>
+      <view class="line hline"></view>
+      <view class="line v v-l1"></view>
+      <view class="line v v-l2"></view>
+      <view class="line v v-l3"></view>
+      <view class="line v r2 r2-l1"></view>
+      <view class="line v r2 r2-l2"></view>
+      <view class="line v r2 r2-l3"></view>
+
+      <!-- 六个能力节点 -->
+      <view
+        class="node node-{{index}}"
+        wx:for="{{vm.abilityList}}"
+        wx:key="key"
+        data-key="{{item.key}}"
+        bindtap="onNode"
+        hover-class="hover-dim"
+      >
+        <view class="node-circle" style="background:{{item.bg}}">
+          <text class="node-emoji">{{item.emoji}}</text>
+          <view class="node-lv" style="background:{{item.color}}">Lv.{{item.level}}</view>
+        </view>
+        <text class="node-name">{{item.name}}</text>
+      </view>
+    </view>
+
+    <view class="tree-foot">
+      <text class="tf-ico">🌿</text>
+      <text class="tf-text">每个节点代表一项能力，完成任务即可为它积累经验</text>
+    </view>
+  </view>
+
+  <!-- 能力详情 -->
+  <view class="sec-head ab-sec">
+    <text class="sec-title">各项能力</text>
+    <text class="sec-hint">训练建议已按经验值生成</text>
+  </view>
+
+  <view class="ab-card" wx:for="{{vm.abilityList}}" wx:key="key" id="ab-{{item.key}}">
+    <view class="ab-top">
+      <view class="ab-ico" style="background:{{item.bg}}">
+        <text class="ab-emoji ico-card">{{item.emoji}}</text>
+      </view>
+      <view class="ab-main">
+        <view class="ab-name-row">
+          <text class="ab-name">{{item.name}}</text>
+          <text class="ab-lv" style="color:{{item.color}};background:{{item.bg}}">Lv.{{item.level}}</text>
+        </view>
+        <view class="ab-desc">{{item.desc}} · 已完成 {{item.doneCount}} 次训练</view>
+      </view>
+    </view>
+
+    <view class="ab-bar">
+      <view class="ab-fill" style="width:{{item.percent}}%;background:{{item.color}}"></view>
+    </view>
+
+    <view class="ab-foot">
+      <text class="ab-exp">{{item.exp}} / 100 经验</text>
+      <text class="ab-next">距 Lv.{{item.level + 1}} 还差 {{100 - item.exp}}</text>
+    </view>
+
+    <view class="ab-advice">
+      <text class="adv-ico">💡</text>
+      <text class="adv-text">{{item.advice}}</text>
+    </view>
+  </view>
+
+</page-shell>

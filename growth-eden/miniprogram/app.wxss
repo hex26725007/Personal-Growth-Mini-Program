@@ -1,0 +1,204 @@
+/* ===== 个人成长进化乐园 · 视觉规范 =====
+   颜色   主色 #12A97F，渐变 #2ECFA6 → #12A97F
+          文字 #17211E / 次级 #5E706A / 弱 #93A29C
+          页面底 #F3F7F5，卡片 #FFFFFF
+   字体   页标题 44/800 · 区块标题 32/700 · 正文 28
+          标签 24 · 说明 20–22
+   图标   入口 64 · 卡片 44 · 行内 32（类名 .ico-entry / .ico-card / .ico-inline）
+   按钮   主按钮 .btn-primary · 次按钮 .btn-ghost · 小胶囊 .btn-pill
+   圆角   卡片 28 · 图标底 28 · 按钮全圆
+*/
+page {
+  background: #f3f7f5;
+  color: #17211e;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+view,
+text,
+scroll-view {
+  box-sizing: border-box;
+}
+
+/* 页面统一留白：底部为自定义 tabBar 让位 */
+.container {
+  padding: 8rpx 32rpx 200rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 32rpx;
+  box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.045);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #17211e;
+  letter-spacing: 0.5rpx;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  color: #ffffff;
+}
+
+.page-sub {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #93a29c;
+}
+
+.muted {
+  color: #93a29c;
+}
+
+.grow {
+  flex: 1;
+}
+
+/* 主按钮 */
+.btn-primary {
+  height: 92rpx;
+  line-height: 92rpx;
+  text-align: center;
+  border-radius: 46rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2ecfa6 0%, #12a97f 100%);
+  box-shadow: 0 12rpx 26rpx rgba(18, 169, 127, 0.26);
+}
+
+.btn-ghost {
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 44rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4a5c56;
+  background: #ffffff;
+  border: 2rpx solid #e4ece9;
+}
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 56rpx;
+  padding: 0 22rpx;
+  border-radius: 28rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #12a97f;
+  background: #e9f8f2;
+}
+
+.ico-entry {
+  font-size: 64rpx;
+  line-height: 1;
+}
+
+.ico-card {
+  font-size: 44rpx;
+  line-height: 1;
+}
+
+.ico-inline {
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.hover-dim {
+  opacity: 0.72;
+}
+
+/* 区块标题行 */
+.sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.sec-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #17211e;
+}
+
+.more {
+  font-size: 24rpx;
+  color: #12a97f;
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  font-size: 30rpx;
+  margin-left: 4rpx;
+  line-height: 1;
+}
+
+/* 通用弹层 */
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 30, 25, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 900;
+  animation: fade 0.18s ease-out;
+}
+
+.sheet {
+  width: 560rpx;
+  background: #ffffff;
+  border-radius: 36rpx;
+  padding: 48rpx 40rpx 36rpx;
+  text-align: center;
+  animation: pop 0.24s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(14rpx);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(24rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: riseIn 0.36s ease-out both;
+}

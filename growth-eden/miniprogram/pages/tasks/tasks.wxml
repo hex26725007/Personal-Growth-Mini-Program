@@ -1,0 +1,66 @@
+<page-shell title="今日任务">
+
+  <!-- 今日进度 -->
+  <view class="progress-card">
+    <view class="pc-row">
+      <view>
+        <view class="pc-label">今日进化进度</view>
+        <view class="pc-num">{{vm.doneCount}}<text class="pc-total"> / {{vm.totalCount}}</text></view>
+      </view>
+      <view class="pc-right">
+        <view class="pc-growth">+{{vm.todayGrowth}}</view>
+        <view class="pc-growth-label">今日成长值</view>
+      </view>
+    </view>
+    <view class="pc-bar">
+      <view class="pc-fill" style="width:{{vm.todayPercent}}%"></view>
+    </view>
+    <view class="pc-tip">
+      {{vm.allDone ? '今日任务全部完成，进化达成 🎉 明天继续保持' : '完成今日全部任务，额外解锁 +20 成长值'}}
+    </view>
+  </view>
+
+  <!-- 能力筛选 -->
+  <scroll-view class="chips" scroll-x="{{true}}" show-scrollbar="{{false}}" enhanced="{{true}}">
+    <view
+      class="chip {{filter === item.key ? 'on' : ''}}"
+      wx:for="{{filters}}"
+      wx:key="key"
+      data-key="{{item.key}}"
+      bindtap="onFilter"
+    >{{item.name}}</view>
+  </scroll-view>
+
+  <!-- 任务列表 -->
+  <view class="task-list">
+    <view class="task {{item.done ? 'is-done' : ''}}" wx:for="{{visibleTasks}}" wx:key="id">
+      <view class="task-ico" style="background:{{item.bg}}">
+        <text class="task-emoji ico-card">{{item.emoji}}</text>
+      </view>
+      <view class="task-main">
+        <view class="task-title">{{item.title}}</view>
+        <view class="task-meta">
+          <text class="tag" style="color:{{item.color}};background:{{item.bg}}">{{item.abilityName}}</text>
+          <text class="dot">·</text>
+          <text>{{item.minutes}} 分钟</text>
+          <text class="dot">·</text>
+          <text>{{item.diffText}}</text>
+        </view>
+      </view>
+      <view class="task-action {{item.done ? 'done' : ''}}" data-id="{{item.id}}" catchtap="onComplete">
+        <text wx:if="{{item.done}}">✓ 已完成</text>
+        <text wx:else>+{{item.growth}}</text>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{visibleTasks.length === 0}}">
+      这个维度今天没有任务，换个筛选看看
+    </view>
+  </view>
+
+  <view class="refresh btn-ghost" bindtap="onShuffle" hover-class="hover-dim">换一批任务</view>
+  <view class="foot-note">任务每天 0:00 刷新 · 没完成也不会扣成长值</view>
+
+</page-shell>
+
+<reward-popups id="reward" />

@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "page-shell": "/components/page-shell/index",
+    "reward-popups": "/components/reward-popups/index"
+  }
+}
