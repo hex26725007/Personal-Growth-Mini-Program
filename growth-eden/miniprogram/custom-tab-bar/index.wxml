@@ -6,7 +6,7 @@
     data-index="{{index}}"
     bindtap="switchTab"
   >
-    <image class="tab-ico {{selected === index ? 'on' : ''}}" src="{{selected === index ? item.activeIcon : item.icon}}" mode="aspectFit" />
+    <text class="tab-emoji {{selected === index ? 'on' : ''}}">{{item.emoji}}</text>
     <view class="tab-label {{selected === index ? 'on' : ''}}">{{item.text}}</view>
   </view>
 </view>

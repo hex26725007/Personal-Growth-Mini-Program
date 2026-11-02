@@ -35,12 +35,14 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.17.4",
-  "appid": "wx4aa550d1fd7060c5",
+  "appid": "wx0b46878133e25940",
   "projectname": "growth",
   "packOptions": {
     "ignore": [],
     "include": []
   },
   "editorSetting": {},
-  "condition": {}
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "isGameTourist": false
 }

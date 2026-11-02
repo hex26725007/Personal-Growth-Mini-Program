@@ -49,7 +49,7 @@ function prettyDate(dateKey) {
 /* ---------------- 默认示例数据 ---------------- */
 function createDefaultState() {
   const today = data.dayKey();
-  const ids = data.buildDailyTasks(today, 5);
+  const ids = data.buildDailyTasks(today, data.DAILY_TASK_COUNT);
   const todayTasks = ids.map((id, i) => ({ id: id, done: i < 2, at: i < 2 ? Date.now() : 0 }));
   const todayGrowth = todayTasks.reduce((sum, t) => sum + (t.done ? data.getTask(t.id).growth : 0), 0);
 
@@ -65,6 +65,7 @@ function createDefaultState() {
   return {
     version: 1,
     nickname: '成长者',
+    avatarUrl: '',
     level: 3,
     weekGrowth: weekGrowth,
     weekStart: weekStartKey(),
@@ -94,7 +95,11 @@ function createDefaultState() {
       growth1000: dayBefore(4),
       early_bird: dayBefore(9)
     },
-    settings: { remind: true, remindTime: '20:30' },
+    settings: {
+      remind: true,
+      remindTime: '20:30',
+      manifesto: '我愿意用持续的小行动，成为更清醒、更稳定、更有行动力的自己。'
+    },
     flags: { earlyBird: true, nightOwl: false },
     updatedAt: Date.now()
   };
@@ -126,7 +131,11 @@ function rollover(s) {
     const y = yesterdayKey();
     if (s.lastActiveDate !== y && s.lastActiveDate !== today) s.streak = 0;
     s.todayDate = today;
-    s.todayTasks = data.buildDailyTasks(today, 5).map((id) => ({ id: id, done: false, at: 0 }));
+    s.todayTasks = data.buildDailyTasks(today, data.DAILY_TASK_COUNT).map((id) => ({
+      id: id,
+      done: false,
+      at: 0
+    }));
     s.history = s.history.filter((h) => h.date !== today);
     s.history.push({ date: today, growth: 0 });
     s.history = s.history.slice(-30);
@@ -142,6 +151,48 @@ function rollover(s) {
   return changed;
 }
 
+function padTodayTasks(s) {
+  const target = data.DAILY_TASK_COUNT;
+  if (s.todayTasks.length >= target) return false;
+
+  const byId = {};
+  s.todayTasks.forEach((t) => {
+    byId[t.id] = t;
+  });
+  const next = [];
+  const used = new Set();
+
+  data.buildDailyTasks(s.todayDate, target).forEach((id) => {
+    if (next.length >= target) return;
+    next.push(byId[id] || { id: id, done: false, at: 0 });
+    used.add(id);
+  });
+
+  s.todayTasks.forEach((t) => {
+    if (t.done && !used.has(t.id) && next.length < target) {
+      next.push(t);
+      used.add(t.id);
+    }
+  });
+
+  if (next.length < target) {
+    const seed = data.hash('eden-pad-' + s.todayDate);
+    data
+      .seededShuffle(
+        data.TASK_LIB.filter((t) => !used.has(t.id)),
+        seed
+      )
+      .forEach((t) => {
+        if (next.length >= target) return;
+        next.push({ id: t.id, done: false, at: 0 });
+        used.add(t.id);
+      });
+  }
+
+  s.todayTasks = next.slice(0, target);
+  return true;
+}
+
 /* ---------------- 读写 ---------------- */
 function persistLocal() {
   try {
@@ -155,18 +206,27 @@ function get() {
   if (cache) return cache;
   const raw = wx.getStorageSync(KEY);
   cache = normalize(raw);
-  if (rollover(cache) || !raw) persistLocal();
+  const changed = rollover(cache) || padTodayTasks(cache) || !raw;
+  if (changed) persistLocal();
   return cache;
 }
 
+let notifying = false;
+
 function notify() {
-  listeners.forEach((fn) => {
-    try {
-      fn(cache);
-    } catch (e) {
-      /* ignore */
-    }
-  });
+  if (notifying) return;
+  notifying = true;
+  try {
+    listeners.forEach((fn) => {
+      try {
+        fn(cache);
+      } catch (e) {
+        /* ignore */
+      }
+    });
+  } finally {
+    notifying = false;
+  }
 }
 
 function save() {
@@ -218,7 +278,7 @@ function bootstrap() {
 
   if (!cloud.available()) {
     syncStatus = 'local';
-    if (rollover(cache) || !raw) persistLocal();
+    if (rollover(cache) || padTodayTasks(cache) || !raw) persistLocal();
     bootPromise = Promise.resolve(cache);
     return bootPromise;
   }
@@ -240,13 +300,13 @@ function bootstrap() {
         syncStatus = 'synced';
         pushToCloud();
       }
-      if (rollover(cache)) persistLocal();
+      if (rollover(cache) || padTodayTasks(cache)) persistLocal();
       notify();
       return cache;
     })
     .catch(() => {
       syncStatus = 'error';
-      if (rollover(cache) || !raw) persistLocal();
+      if (rollover(cache) || padTodayTasks(cache) || !raw) persistLocal();
       notify();
       return cache;
     });
@@ -365,7 +425,7 @@ function regenerateTasks() {
       data.TASK_LIB.filter((t) => !done.some((d) => d.id === t.id)),
       Math.floor(Math.random() * 100000) + 7
     )
-    .slice(0, 5 - done.length);
+    .slice(0, data.DAILY_TASK_COUNT - done.length);
   s.todayTasks = done.concat(pool.map((t) => ({ id: t.id, done: false, at: 0 })));
   save();
   return s;
@@ -383,6 +443,25 @@ function setNickname(name) {
   if (!v) return;
   s.nickname = v.slice(0, 12);
   save();
+}
+
+function setAvatar(tempPath) {
+  if (!tempPath) return;
+  const s = get();
+  const fs = wx.getFileSystemManager();
+  const dest = wx.env.USER_DATA_PATH + '/growth_avatar.jpg';
+  fs.copyFile({
+    srcPath: tempPath,
+    destPath: dest,
+    success: () => {
+      s.avatarUrl = dest;
+      save();
+    },
+    fail: () => {
+      s.avatarUrl = tempPath;
+      save();
+    }
+  });
 }
 
 function resetDemo() {
@@ -453,8 +532,8 @@ function viewModel() {
   }));
 
   return {
-    state: s,
     nickname: s.nickname,
+    avatarUrl: s.avatarUrl || '',
     level: s.level,
     levelTitle: data.levelTitle(s.level),
     weekGrowth: s.weekGrowth,
@@ -476,6 +555,7 @@ function viewModel() {
     weekBars: weekBars,
     syncStatus: syncStatus,
     streak: s.streak,
+    bestStreak: s.bestStreak,
     totalGrowth: s.totalGrowth,
     completedCount: s.completedCount,
     daysActive: s.daysActive,
@@ -501,6 +581,7 @@ module.exports = {
   regenerateTasks,
   updateSettings,
   setNickname,
+  setAvatar,
   resetDemo,
   bootstrap,
   syncNow,

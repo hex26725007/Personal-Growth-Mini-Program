@@ -5,7 +5,7 @@
 
 .tree-card {
   margin-top: 24rpx;
-  padding: 30rpx 0 26rpx;
+  padding: 30rpx 36rpx 26rpx;
   border-radius: 32rpx;
   background: #ffffff;
   box-shadow: 0 8rpx 26rpx rgba(21, 88, 68, 0.05);
@@ -14,7 +14,9 @@
 
 .tree {
   position: relative;
-  width: 100%;
+  width: 520rpx;
+  max-width: 100%;
+  margin: 0 auto;
   height: 560rpx;
 }
 
@@ -69,7 +71,7 @@
 }
 
 .trunk {
-  left: 342rpx;
+  left: 259rpx;
   top: 128rpx;
   width: 2rpx;
   height: 62rpx;
@@ -78,7 +80,7 @@
 .hline {
   left: 75rpx;
   top: 190rpx;
-  width: 536rpx;
+  width: 370rpx;
   height: 2rpx;
 }
 
@@ -93,16 +95,28 @@
 }
 
 .v-l2 {
-  left: 342rpx;
+  left: 259rpx;
 }
 
 .v-l3 {
-  left: 610rpx;
+  left: 444rpx;
 }
 
 .r2 {
   top: 370rpx;
   height: 30rpx;
+}
+
+.r2-l1 {
+  left: 74rpx;
+}
+
+.r2-l2 {
+  left: 259rpx;
+}
+
+.r2-l3 {
+  left: 444rpx;
 }
 
 /* 能力节点 */
@@ -183,7 +197,7 @@
 .tree-foot {
   display: flex;
   align-items: center;
-  margin: 10rpx 32rpx 0;
+  margin: 10rpx 0 0;
   padding: 18rpx 22rpx;
   border-radius: 20rpx;
   background: #f6fbf9;

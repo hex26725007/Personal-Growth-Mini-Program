@@ -7,12 +7,7 @@ App({
   },
 
   onLaunch() {
-    cloud.init();
+    if (cloud.available()) cloud.init();
     this.globalData.ready = store.bootstrap();
-  },
-
-  onShow() {
-    // 回到前台时做一次跨天结算
-    store.get();
   }
 });

@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>个人成长进化乐园 · MVP 交互预览</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  :root{
+    --mint:#12a97f; --mint-2:#31cfa6; --ink:#17211e; --sub:#93a29c;
+    --line:#eef3f1; --bg:#f3f7f5; --orange:#ff8a3d;
+  }
+  html,body{margin:0;padding:0}
+  body{
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 600px at 12% -10%, #d9ede5 0%, rgba(217,237,229,0) 62%),
+      radial-gradient(700px 500px at 92% 108%, #e3f2ea 0%, rgba(227,242,234,0) 60%),
+      #eef4f1;
+    display:flex; flex-direction:column; align-items:center;
+    padding:26px 16px 34px;
+  }
+  .stage-head{text-align:center; margin-bottom:16px}
+  .stage-head h1{margin:0; font-size:21px; letter-spacing:.5px; font-weight:800}
+  .stage-head p{margin:6px 0 0; font-size:12.5px; color:#7d8d87}
+  .stage-head b{color:var(--mint)}
+
+  .phone-wrap{transform-origin:top center}
+  .phone{
+    position:relative;
+    width:408px; height:862px;
+    background:var(--bg);
+    border:9px solid #16211d;
+    border-radius:46px;
+    box-shadow:0 30px 60px rgba(16,50,40,.22), 0 4px 12px rgba(16,50,40,.14);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .island{position:absolute; top:9px; left:50%; transform:translateX(-50%); width:104px; height:26px; background:#0b1210; border-radius:14px; z-index:30}
+  .statusbar{height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; font-size:13px; font-weight:600; flex-shrink:0}
+  .statusbar .right{display:flex; align-items:center; gap:5px; opacity:.85}
+  .navbar{height:44px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:600; flex-shrink:0; letter-spacing:.3px}
+  .viewport{position:relative; flex:1; overflow:hidden}
+  .screen{position:absolute; inset:0; overflow-y:auto; padding:2px 16px 22px; display:none; scrollbar-width:none}
+  .screen::-webkit-scrollbar{display:none}
+  .screen.active{display:block}
+
+  .card{background:#fff; border-radius:14px; padding:16px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .sec-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:2px}
+  .sec-title{font-size:16px; font-weight:700}
+  .sec-hint{font-size:10.5px; color:#a3b0ab}
+  .more{font-size:12px; color:var(--mint); display:flex; align-items:center; gap:2px; cursor:pointer}
+
+  /* hero */
+  .hero{position:relative; border-radius:16px; padding:18px 17px 15px; color:#fff;
+    background:linear-gradient(135deg,#31cfa6 0%,#13a87f 100%);
+    box-shadow:0 9px 20px rgba(18,169,127,.24); overflow:hidden}
+  .hero::before{content:""; position:absolute; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,.1); right:-58px; top:-80px}
+  .hero::after{content:""; position:absolute; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,.07); right:24px; bottom:-72px}
+  .hero-row{position:relative; z-index:2; display:flex; align-items:flex-start; justify-content:space-between}
+  .hello{font-size:12px; opacity:.9}
+  .level{margin-top:6px; font-size:17px; font-weight:700}
+  .level b{font-size:23px; font-weight:800; letter-spacing:.4px}
+  .hero-right{text-align:right}
+  .pct{font-size:32px; font-weight:800; line-height:1; letter-spacing:-1px}
+  .pct-sub{margin-top:6px; font-size:10px; opacity:.84}
+  .bar{position:relative; z-index:2; margin-top:17px; height:6px; border-radius:4px; background:rgba(255,255,255,.28); overflow:hidden}
+  .bar-fill{height:100%; border-radius:4px; background:#fff; transition:width .45s ease}
+  .hero-foot{position:relative; z-index:2; display:flex; justify-content:space-between; margin-top:9px; font-size:11px; opacity:.92}
+  .hero-foot b{font-weight:600}
+
+  /* quote */
+  .quote{margin-top:12px}
+  .quote-head{display:flex; align-items:center; gap:5px}
+  .quote-title{font-size:13px; font-weight:600; color:#3c4b46}
+  .quote-text{margin-top:10px; font-size:16px; font-weight:600; line-height:1.6}
+  .quote-foot{margin-top:7px; font-size:10px; color:#a6b3ae}
+
+  /* entries */
+  .entries{margin-top:12px}
+  .entry-row{display:flex; margin-top:14px}
+  .entry{flex:1; display:flex; flex-direction:column; align-items:center; cursor:pointer}
+  .entry-ico{position:relative; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:21px}
+  .entry-dot{position:absolute; top:-2px; right:-2px; min-width:16px; height:16px; padding:0 4px; border-radius:8px; background:#ff7a45; color:#fff; font-size:10px; line-height:16px; text-align:center; box-shadow:0 2px 4px rgba(255,122,69,.35)}
+  .entry-label{margin-top:8px; font-size:12px; color:#43534d}
+
+  /* todo */
+  .todo{margin-top:12px; padding-bottom:6px}
+  .todo-item{display:flex; align-items:center; padding:13px 0; border-bottom:1px solid #f2f6f4}
+  .todo-item:last-child{border-bottom:none}
+  .check{width:22px; height:22px; border-radius:50%; border:1.5px solid #d8e5e0; display:flex; align-items:center; justify-content:center; margin-right:11px; flex-shrink:0; cursor:pointer; color:#fff; font-size:12px; transition:all .15s}
+  .check.on{background:#17bf93; border-color:#17bf93}
+  .todo-main{flex:1; min-width:0}
+  .todo-title{font-size:14px}
+  .todo-title.done{color:#b0bcb7; text-decoration:line-through}
+  .todo-meta{margin-top:3px; font-size:10px; color:#a0ada8}
+  .todo-growth{font-size:13px; font-weight:700; color:var(--orange); flex-shrink:0}
+  .todo-growth span{font-size:9px; font-weight:500; margin-left:1px}
+
+  .streak{margin-top:12px; display:flex; align-items:center; justify-content:space-between; padding:13px 15px; background:#fff; border-radius:14px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .streak-left{display:flex; align-items:center; gap:9px}
+  .streak-ico{font-size:20px}
+  .streak-t{font-size:13.5px; font-weight:600}
+  .streak-s{margin-top:3px; font-size:10px; color:#a0ada8}
+  .streak-go{font-size:11px; color:var(--mint); background:#e9f8f2; padding:5px 10px; border-radius:10px}
+
+  /* page head */
+  .page-head{padding:6px 0 4px}
+  .page-title{font-size:23px; font-weight:800; letter-spacing:.5px}
+  .page-sub{margin-top:4px; font-size:12px; color:var(--sub)}
+
+  /* tasks */
+  .progress-card{margin-top:12px; padding:15px 16px 13px; background:#fff; border-radius:14px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .pc-row{display:flex; align-items:flex-end; justify-content:space-between}
+  .pc-label{font-size:11px; color:var(--sub)}
+  .pc-num{margin-top:5px; font-size:26px; font-weight:800; line-height:1}
+  .pc-num span{font-size:13px; font-weight:500; color:#b3bfba}
+  .pc-right{text-align:right}
+  .pc-growth{font-size:20px; font-weight:800; color:var(--mint); line-height:1}
+  .pc-growth-label{margin-top:4px; font-size:10px; color:#a3b0ab}
+  .pc-bar{margin-top:12px; height:7px; border-radius:4px; background:#eef4f1; overflow:hidden}
+  .pc-fill{height:100%; border-radius:4px; background:linear-gradient(90deg,#35d2aa,#12a97f); transition:width .45s ease}
+  .pc-tip{margin-top:8px; font-size:10.5px; color:#a3b0ab}
+  .chips{display:flex; gap:8px; margin:14px -16px 0; padding:0 16px 2px; overflow-x:auto; scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(90deg,#000 86%,rgba(0,0,0,.15) 100%); mask-image:linear-gradient(90deg,#000 86%,rgba(0,0,0,.15) 100%)}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto; padding:6px 13px; border-radius:13px; background:#fff; border:1px solid #eef3f1; color:#6b7a75; font-size:12px; cursor:pointer}
+  .chip.on{background:var(--mint); border-color:var(--mint); color:#fff; font-weight:600}
+  .task{display:flex; align-items:center; padding:13px 14px; margin-top:10px; background:#fff; border-radius:13px; box-shadow:0 4px 12px rgba(21,88,68,.04)}
+  .task.done{background:#f7faf9; box-shadow:none}
+  .task-ico{width:42px; height:42px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0}
+  .task-main{flex:1; min-width:0; padding:0 10px}
+  .task-title{font-size:14.5px; font-weight:600}
+  .task.done .task-title{color:#9daaa5; text-decoration:line-through; font-weight:500}
+  .task-meta{display:flex; align-items:center; margin-top:5px; font-size:10px; color:#a3b0ab; white-space:nowrap}
+  .tag{padding:1px 6px; border-radius:4px; font-size:9.5px; margin-right:2px}
+  .dot{margin:0 4px; color:#d2dcd8}
+  .task-action{flex-shrink:0; padding:6px 10px; border-radius:11px; background:#e9f8f2; color:var(--mint); font-size:13px; font-weight:700; cursor:pointer}
+  .task-action.done{background:#f1f5f3; color:#a9b6b1; font-size:11px; font-weight:500}
+  .refresh{margin:18px auto 0; width:150px; height:42px; line-height:42px; text-align:center; border-radius:21px; background:#fff; border:1px solid #e8efec; color:#4a5c56; font-size:13px; cursor:pointer}
+  .foot-note{margin-top:10px; text-align:center; font-size:10px; color:#b6c1bd}
+  .empty{padding:40px 0; text-align:center; font-size:12px; color:#a3b0ab}
+
+  /* ability tree */
+  .tree-card{margin-top:12px; padding:15px 0 13px; background:#fff; border-radius:16px; box-shadow:0 4px 14px rgba(21,88,68,.05)}
+  .tree{position:relative; width:358px; height:290px}
+  .core{position:absolute; top:0; left:145px; width:68px; text-align:center; cursor:pointer}
+  .core-ring{width:68px; height:68px; border-radius:50%; background:linear-gradient(135deg,#31cfa6,#12a97f); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 14px rgba(18,169,127,.28)}
+  .core-inner{width:55px; height:55px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center}
+  .core-lv{font-size:15px; font-weight:800; color:var(--mint); line-height:1.1}
+  .core-label{font-size:8px; color:#9aa8a3; margin-top:1px}
+  .trunk{position:absolute; left:178px; top:68px; width:1px; height:32px; background:#dbe9e4}
+  .hline{position:absolute; left:39px; top:100px; width:280px; height:1px; background:#dbe9e4}
+  .vline{position:absolute; width:1px; background:#dbe9e4}
+  .node{position:absolute; width:78px; display:flex; flex-direction:column; align-items:center; cursor:pointer}
+  .node-circle{position:relative; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:21px; box-shadow:0 4px 10px rgba(21,88,68,.08)}
+  .node-lv{position:absolute; right:-4px; bottom:-3px; padding:1px 5px; border-radius:6px; font-size:8.5px; font-weight:600; color:#fff}
+  .node-name{margin-top:8px; font-size:11px; color:#55655f}
+  .tree-foot{display:flex; align-items:center; margin:10px 16px 0; padding:9px 11px; border-radius:10px; background:#f6fbf9; font-size:10px; color:#7d8d87; line-height:1.5}
+  .tree-foot span{margin-right:5px}
+  .ab-sec{margin:18px 0 9px}
+  .ab-card{padding:14px; margin-bottom:10px; background:#fff; border-radius:14px; box-shadow:0 4px 12px rgba(21,88,68,.04)}
+  .ab-top{display:flex; align-items:center}
+  .ab-ico{width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0}
+  .ab-main{flex:1; min-width:0; padding-left:10px}
+  .ab-name-row{display:flex; align-items:center; gap:6px}
+  .ab-name{font-size:14.5px; font-weight:700}
+  .ab-lv{padding:1px 6px; border-radius:5px; font-size:9px; font-weight:600}
+  .ab-desc{margin-top:4px; font-size:10px; color:#9aa8a3}
+  .ab-bar{margin-top:12px; height:6px; border-radius:3px; background:#f1f5f3; overflow:hidden}
+  .ab-fill{height:100%; border-radius:3px; transition:width .45s ease}
+  .ab-foot{display:flex; justify-content:space-between; margin-top:6px; font-size:10px; color:#a3b0ab}
+  .ab-advice{display:flex; gap:5px; margin-top:11px; padding:9px 10px; border-radius:9px; background:#f7fbf9; font-size:10.5px; line-height:1.55; color:#6b7a75}
+
+  /* achievements */
+  .collect-card{margin-top:12px; padding:15px 16px 13px; border-radius:14px; background:linear-gradient(135deg,#fff 0%,#f4fbf8 100%); box-shadow:0 4px 14px rgba(21,88,68,.05)}
+  .cc-row{display:flex; align-items:center; justify-content:space-between}
+  .cc-label{font-size:11px; color:var(--sub)}
+  .cc-num{margin-top:5px; font-size:25px; font-weight:800; line-height:1}
+  .cc-num span{font-size:12px; font-weight:500; color:#b3bfba}
+  .cc-emoji{font-size:28px; opacity:.9}
+  .cc-bar{margin-top:11px; height:6px; border-radius:3px; background:#eef4f1; overflow:hidden}
+  .cc-fill{height:100%; border-radius:3px; background:linear-gradient(90deg,#35d2aa,#12a97f); transition:width .45s ease}
+  .wall{display:flex; flex-wrap:wrap; margin-top:12px; padding:15px 4px 2px; background:#fff; border-radius:14px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .badge{width:33.33%; display:flex; flex-direction:column; align-items:center; margin-bottom:15px; cursor:pointer}
+  .badge-ico{position:relative; width:52px; height:52px; border-radius:17px; border:1.5px solid transparent; background:#f5f8f7; display:flex; align-items:center; justify-content:center; font-size:22px}
+  .badge-ico.locked{border-color:#eaf0ed}
+  .badge-ico.locked .emo{opacity:.28}
+  .badge-check{position:absolute; right:-4px; bottom:-4px; width:16px; height:16px; border-radius:50%; border:1.5px solid #fff; color:#fff; font-size:9px; font-weight:700; display:flex; align-items:center; justify-content:center}
+  .badge-name{margin-top:7px; font-size:10px; color:#55655f; text-align:center}
+  .badge-name.off{color:#b0bcb7}
+  .mile-card{margin-top:10px; padding:16px 14px 2px; background:#fff; border-radius:14px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .mile{display:flex}
+  .mile-rail{width:24px; display:flex; flex-direction:column; align-items:center; flex-shrink:0}
+  .mile-dot{width:13px; height:13px; margin-top:2px; border-radius:50%; border:1.5px solid #dce7e3; background:#fff; display:flex; align-items:center; justify-content:center; color:#fff; font-size:8px}
+  .mile-dot.on{background:#17bf93; border-color:#17bf93}
+  .mile-line{flex:1; width:1px; margin-top:4px; background:#edf3f0}
+  .mile-main{flex:1; padding:0 0 17px 7px}
+  .mile-row{display:flex; align-items:center; justify-content:space-between}
+  .mile-name{font-size:12.5px; color:#22302b}
+  .mile-val{font-size:10.5px; color:#a3b0ab}
+  .mile-val.on{color:var(--mint); font-weight:600}
+  .mile-bar{margin-top:7px; height:5px; border-radius:3px; background:#f2f6f4; overflow:hidden}
+  .mile-fill{height:100%; border-radius:3px; background:#b9e6d8}
+  .mile-fill.on{background:linear-gradient(90deg,#35d2aa,#12a97f)}
+
+  /* profile */
+  .profile-card{display:flex; align-items:center; margin-top:6px; padding:18px 16px; border-radius:16px; background:linear-gradient(135deg,#fff 0%,#f2fbf7 100%); box-shadow:0 4px 14px rgba(21,88,68,.05)}
+  .avatar{width:54px; height:54px; border-radius:17px; background:linear-gradient(135deg,#31cfa6,#12a97f); color:#fff; font-size:22px; font-weight:700; display:flex; align-items:center; justify-content:center; box-shadow:0 5px 11px rgba(18,169,127,.26); flex-shrink:0}
+  .p-main{flex:1; min-width:0; padding-left:12px}
+  .p-name-row{display:flex; align-items:center; gap:7px}
+  .p-name{font-size:17px; font-weight:700}
+  .p-edit{padding:1px 7px; border-radius:6px; font-size:9px; color:var(--mint); background:#e9f8f2; cursor:pointer}
+  .p-sub{margin-top:5px; font-size:10.5px; color:var(--sub)}
+  .p-lv{flex-shrink:0; padding:4px 9px; border-radius:9px; font-size:11px; font-weight:700; color:var(--mint); background:#e9f8f2}
+  .stats{display:flex; margin-top:12px; padding:15px 4px; background:#fff; border-radius:14px; box-shadow:0 4px 14px rgba(21,88,68,.045)}
+  .stat{flex:1; text-align:center; position:relative}
+  .stat + .stat::before{content:""; position:absolute; left:0; top:4px; bottom:4px; width:1px; background:#f0f4f2}
+  .stat-num{font-size:19px; font-weight:800; line-height:1.2}
+  .stat-label{margin-top:4px; font-size:9.5px; color:#a3b0ab}
+  .stat-foot{display:flex; align-items:center; justify-content:center; gap:5px; margin-top:8px; font-size:9.5px; color:#a9b6b1}
+  .chart-card{margin-top:12px}
+  .chart{display:flex; align-items:flex-end; justify-content:space-between; margin-top:14px; height:130px}
+  .bar-col{flex:1; display:flex; flex-direction:column; align-items:center; height:100%}
+  .bar-wrap{flex:1; width:100%; display:flex; align-items:flex-end; justify-content:center}
+  .bar{width:13px; border-radius:7px; background:#dcf0e8; transition:height .45s ease}
+  .bar.on{background:linear-gradient(180deg,#35d2aa,#12a97f)}
+  .bar-label{margin-top:7px; font-size:9.5px; color:#b0bcb7}
+  .bar-label.on{color:var(--mint); font-weight:600}
+  .list{margin-top:12px; padding:4px 16px}
+  .row{display:flex; align-items:center; justify-content:space-between; min-height:52px; border-bottom:1px solid #f3f7f5; cursor:pointer}
+  .row.last{border-bottom:none}
+  .row-left{display:flex; align-items:center; gap:9px}
+  .row-ico{font-size:15px}
+  .row-title{font-size:13.5px; color:#22302b}
+  .row-right{display:flex; align-items:center; gap:5px}
+  .row-val{font-size:11.5px; color:#9aa8a3}
+  .arrow{color:#c4cfcb; font-size:15px}
+  .switch{width:38px; height:22px; border-radius:11px; background:#e3eae7; position:relative; transition:background .2s}
+  .switch.on{background:#17bf93}
+  .switch i{position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.18); transition:left .2s}
+  .switch.on i{left:18px}
+  .sync-dot{width:6px; height:6px; border-radius:50%; background:#c8d4d0}
+  .version{margin-top:18px; text-align:center; font-size:9.5px; color:#bcc7c3}
+
+  /* tabbar */
+  .tabbar{height:60px; flex-shrink:0; display:flex; align-items:center; background:rgba(255,255,255,.97); border-top:1px solid var(--line); z-index:20}
+  .tab{flex:1; height:60px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; color:#93a29c; border:none; background:none; padding:0}
+  .tab svg{width:22px; height:22px; transition:transform .18s ease}
+  .tab span{font-size:10px; transition:color .2s ease}
+  .tab.on{color:var(--mint)}
+  .tab.on svg{transform:translateY(-1px) scale(1.06)}
+  .tab.on span{font-weight:600}
+  .home-bar{position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:134px; height:5px; border-radius:3px; background:#0b1210; opacity:.25; z-index:25}
+
+  /* misc */
+  .overlay{position:absolute; inset:0; background:rgba(12,30,25,.42); display:none; align-items:center; justify-content:center; z-index:60; padding:0 30px}
+  .overlay.show{display:flex; animation:fade .18s ease-out}
+  .sheet{width:100%; background:#fff; border-radius:19px; padding:26px 20px 18px; text-align:center; animation:pop .24s cubic-bezier(.2,1.2,.4,1)}
+  .sheet .emoji{font-size:28px}
+  .reward-growth{margin-top:9px; font-size:42px; font-weight:800; color:var(--mint); line-height:1; letter-spacing:-1px}
+  .reward-unit{margin-top:3px; font-size:11px; color:var(--sub); letter-spacing:2px}
+  .reward-line{margin-top:13px; font-size:13px; color:#43534d}
+  .reward-tags{display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:11px}
+  .rt{padding:4px 9px; border-radius:10px; font-size:10.5px; background:#f3f7f5; color:#4a5c56}
+  .rt.mint{background:#e9f8f2; color:var(--mint)}
+  .rt.gold{background:#fff5e3; color:#c98414}
+  .btn-main{margin-top:17px; height:42px; line-height:42px; border-radius:21px; color:#fff; font-size:13.5px; font-weight:600; background:linear-gradient(135deg,#2ecfa6,#12a97f); box-shadow:0 6px 13px rgba(18,169,127,.26); cursor:pointer}
+  .d-ico{width:70px; height:70px; margin:0 auto; border-radius:22px; border:2px solid transparent; background:#f5f8f7; display:flex; align-items:center; justify-content:center; font-size:31px}
+  .d-name{margin-top:13px; font-size:18px; font-weight:800}
+  .d-state{margin-top:6px; font-size:10.5px; color:#a3b0ab}
+  .d-state.on{color:var(--mint)}
+  .d-desc{margin-top:11px; font-size:12px; color:#6b7a75; line-height:1.6}
+  .name-input{margin-top:14px; width:100%; height:38px; border-radius:10px; border:1px solid #e4ece9; padding:0 12px; font-size:14px; color:var(--ink); outline:none; font-family:inherit}
+  .name-input:focus{border-color:var(--mint)}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes pop{from{opacity:0;transform:scale(.9) translateY(7px)}to{opacity:1;transform:scale(1) translateY(0)}}
+  .toast{position:absolute; left:50%; bottom:78px; transform:translateX(-50%) translateY(6px); background:rgba(23,33,30,.88); color:#fff; font-size:11.5px; padding:8px 14px; border-radius:10px; opacity:0; pointer-events:none; transition:all .22s ease; z-index:70; white-space:nowrap; max-width:300px; overflow:hidden; text-overflow:ellipsis}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  .stage-foot{margin-top:14px; display:flex; align-items:center; gap:10px; font-size:11.5px; color:#8a9a94}
+  .stage-foot .reset{padding:6px 12px; border-radius:8px; border:1px solid #d7e3de; background:rgba(255,255,255,.7); color:#4a5c56; cursor:pointer; font-family:inherit; font-size:11.5px}
+  .stage-foot .reset:hover{border-color:#12a97f; color:#12a97f}
+</style>
+</head>
+<body>
+
+<div class="stage-head">
+  <h1>个人成长进化乐园 <span style="font-size:12px;font-weight:600;color:#12a97f;vertical-align:middle">MVP</span></h1>
+  <p>点击底部 Tab 切换页面 · 点任务圆圈即可完成并结算成长值</p>
+</div>
+
+<div class="phone-wrap" id="phoneWrap">
+  <div class="phone">
+    <div class="island"></div>
+
+    <div class="statusbar">
+      <span>9:41</span>
+      <span class="right">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.3" y="5" width="3" height="6" rx="1"/><rect x="8.6" y="2.5" width="3" height="8.5" rx="1"/><rect x="12.9" y="0" width="3" height="11" rx="1"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M1 3.6a9.5 9.5 0 0 1 13 0"/><path d="M3.4 6.2a6 6 0 0 1 8.2 0"/><path d="M5.9 8.7a2.4 2.4 0 0 1 3.2 0"/></svg>
+        <svg width="23" height="11" viewBox="0 0 23 11" fill="none"><rect x="0.6" y="0.6" width="18" height="9.8" rx="2.6" stroke="currentColor" stroke-opacity=".45"/><rect x="2.2" y="2.2" width="14.8" height="6.6" rx="1.5" fill="currentColor"/><path d="M20.4 4v3c1-.3 1-2.7 0-3z" fill="currentColor" fill-opacity=".5"/></svg>
+      </span>
+    </div>
+
+    <div class="navbar" id="navTitle">个人成长进化乐园</div>
+
+    <div class="viewport">
+      <!-- ============ 首页 ============ -->
+      <div class="screen active" data-screen="home">
+        <div class="hero">
+          <div class="hero-row">
+            <div>
+              <div class="hello">你好，<span id="homeName">成长者</span> 🌱</div>
+              <div class="level">当前成长 <b>Lv.<span id="homeLevel">3</span></b></div>
+            </div>
+            <div class="hero-right">
+              <div class="pct"><span id="homePct">45</span>%</div>
+              <div class="pct-sub">距离下一级</div>
+            </div>
+          </div>
+          <div class="bar"><div class="bar-fill" id="homeBar" style="width:45%"></div></div>
+          <div class="hero-foot"><span>本周成长值</span><b id="homeWeek">223 / 500</b></div>
+        </div>
+
+        <div class="card quote">
+          <div class="quote-head"><span>✨</span><span class="quote-title">今日进化箴言</span></div>
+          <div class="quote-text" id="quoteText">微小持续，就是进化的力量。</div>
+          <div class="quote-foot" id="quoteDate">进化乐园 · 10月19日</div>
+        </div>
+
+        <div class="card entries">
+          <div class="sec-head"><span class="sec-title">快速入口</span></div>
+          <div class="entry-row">
+            <div class="entry" onclick="go('tasks')">
+              <div class="entry-ico" style="background:#e6f8f1">📋
+                <div class="entry-dot" id="entryDot">3</div>
+              </div>
+              <div class="entry-label">今日任务</div>
+            </div>
+            <div class="entry" onclick="go('ability')">
+              <div class="entry-ico" style="background:#eaf7f0">🌳</div>
+              <div class="entry-label">能力树</div>
+            </div>
+            <div class="entry" onclick="go('achv')">
+              <div class="entry-ico" style="background:#fff3e4">🏅</div>
+              <div class="entry-label">成就徽章</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card todo">
+          <div class="sec-head">
+            <span class="sec-title">今日待办</span>
+            <span class="more" onclick="go('tasks')">查看全部 ›</span>
+          </div>
+          <div id="homeTodo"></div>
+        </div>
+
+        <div class="streak">
+          <div class="streak-left">
+            <span class="streak-ico">🔥</span>
+            <div>
+              <div class="streak-t">连续进化 <span id="homeStreak">5</span> 天</div>
+              <div class="streak-s" id="homeStreakHint">再坚持 2 天解锁「七日成诗」</div>
+            </div>
+          </div>
+          <span class="streak-go" onclick="go('achv')">去看看</span>
+        </div>
+      </div>
+
+      <!-- ============ 任务页 ============ -->
+      <div class="screen" data-screen="tasks">
+        <div class="page-head">
+          <div class="page-title">今日任务</div>
+          <div class="page-sub" id="taskSub">10月19日 · 完成 2/5</div>
+        </div>
+
+        <div class="progress-card">
+          <div class="pc-row">
+            <div>
+              <div class="pc-label">今日进化进度</div>
+              <div class="pc-num"><span id="taskDone">2</span><span> / <span id="taskTotal">5</span></span></div>
+            </div>
+            <div class="pc-right">
+              <div class="pc-growth" id="taskGrowth">+30</div>
+              <div class="pc-growth-label">今日成长值</div>
+            </div>
+          </div>
+          <div class="pc-bar"><div class="pc-fill" id="taskBar" style="width:40%"></div></div>
+          <div class="pc-tip" id="taskTip">完成今日全部任务，额外解锁 +20 成长值</div>
+        </div>
+
+        <div class="chips" id="chips"></div>
+        <div id="taskList" style="margin-top:2px"></div>
+
+        <div class="refresh" onclick="shuffleTasks()">换一批任务</div>
+        <div class="foot-note">任务每天 0:00 刷新 · 没完成也不会扣成长值</div>
+      </div>
+
+      <!-- ============ 能力页 ============ -->
+      <div class="screen" data-screen="ability">
+        <div class="page-head">
+          <div class="page-title">能力进化树</div>
+          <div class="page-sub">六维共进，才是真的进化</div>
+        </div>
+
+        <div class="tree-card">
+          <div class="tree" id="tree">
+            <div class="core" onclick="go('home')">
+              <div class="core-ring">
+                <div class="core-inner">
+                  <div class="core-lv">Lv.<span id="treeLevel">3</span></div>
+                  <div class="core-label">核心</div>
+                </div>
+              </div>
+            </div>
+            <div class="trunk"></div>
+            <div class="hline"></div>
+            <div class="vline" style="left:39px; top:100px; height:16px"></div>
+            <div class="vline" style="left:178px; top:100px; height:16px"></div>
+            <div class="vline" style="left:318px; top:100px; height:16px"></div>
+            <div class="vline" style="left:39px; top:186px; height:22px"></div>
+            <div class="vline" style="left:178px; top:186px; height:22px"></div>
+            <div class="vline" style="left:318px; top:186px; height:22px"></div>
+          </div>
+          <div class="tree-foot"><span>🌿</span>每个节点代表一项能力，完成任务即可为它积累经验</div>
+        </div>
+
+        <div class="sec-head ab-sec">
+          <span class="sec-title">各项能力</span>
+          <span class="sec-hint">训练建议已按经验值生成</span>
+        </div>
+        <div id="abilityList"></div>
+      </div>
+
+      <!-- ============ 成就页 ============ -->
+      <div class="screen" data-screen="achv">
+        <div class="page-head">
+          <div class="page-title">成就徽章</div>
+          <div class="page-sub" id="achvSub">已收集 4 / 12 枚 · 每一枚都是走过来的证据</div>
+        </div>
+
+        <div class="collect-card">
+          <div class="cc-row">
+            <div>
+              <div class="cc-label">徽章收集进度</div>
+              <div class="cc-num"><span id="achvCount">4</span><span> / <span id="achvTotal">12</span></span></div>
+            </div>
+            <div class="cc-emoji">🏅</div>
+          </div>
+          <div class="cc-bar"><div class="cc-fill" id="achvBar" style="width:33%"></div></div>
+        </div>
+
+        <div class="wall" id="badgeWall"></div>
+
+        <div class="sec-head" style="margin:18px 0 9px">
+          <span class="sec-title">里程碑</span>
+          <span class="sec-hint">再往前一点就解锁</span>
+        </div>
+        <div class="mile-card" id="milestones"></div>
+      </div>
+
+      <!-- ============ 我的 ============ -->
+      <div class="screen" data-screen="profile">
+        <div class="profile-card">
+          <div class="avatar" id="avatarChar">成</div>
+          <div class="p-main">
+            <div class="p-name-row">
+              <span class="p-name" id="profName">成长者</span>
+              <span class="p-edit" onclick="openRename()">编辑</span>
+            </div>
+            <div class="p-sub" id="profSub">进化者 · 加入进化乐园 21 天</div>
+          </div>
+          <div class="p-lv">Lv.<span id="profLevel">3</span></div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><div class="stat-num" id="statGrowth">1880</div><div class="stat-label">累计成长值</div></div>
+          <div class="stat"><div class="stat-num" id="statDone">34</div><div class="stat-label">完成任务</div></div>
+          <div class="stat"><div class="stat-num" id="statStreak">5</div><div class="stat-label">连续天数</div></div>
+          <div class="stat"><div class="stat-num" id="statBadge">4</div><div class="stat-label">解锁徽章</div></div>
+        </div>
+        <div class="stat-foot">
+          <span>最高连击 <span id="statBest">7</span> 天</span><span>·</span>
+          <span>完美一天 <span id="statPerfect">1</span> 次</span><span>·</span>
+          <span id="statJoin">开始于 2026-09-28</span>
+        </div>
+
+        <div class="card chart-card">
+          <div class="sec-head">
+            <span class="sec-title">近 7 天成长</span>
+            <span class="sec-hint">共 <span id="weekTotal">223</span> 成长值</span>
+          </div>
+          <div class="chart" id="chart"></div>
+        </div>
+
+        <div class="card list">
+          <div class="row">
+            <div class="row-left"><span class="row-ico">⏰</span><span class="row-title">每日提醒</span></div>
+            <div class="switch on" id="remindSwitch" onclick="toggleRemind()"><i></i></div>
+          </div>
+          <div class="row" onclick="toast('MVP 原型中提醒时间仅做展示')">
+            <div class="row-left"><span class="row-ico">🕗</span><span class="row-title">提醒时间</span></div>
+            <div class="row-right"><span class="row-val">20:30</span><span class="arrow">›</span></div>
+          </div>
+          <div class="row" onclick="toast('网页预览不接云端，小程序里可开启云开发同步')">
+            <div class="row-left"><span class="row-ico">☁️</span><span class="row-title">云端同步</span></div>
+            <div class="row-right"><span class="sync-dot"></span><span class="row-val">仅本机保存</span><span class="arrow">›</span></div>
+          </div>
+          <div class="row" onclick="toast('个人成长进化乐园 · MVP 0.1')">
+            <div class="row-left"><span class="row-ico">🌿</span><span class="row-title">关于进化乐园</span></div>
+            <div class="row-right"><span class="row-val">v0.1 MVP</span><span class="arrow">›</span></div>
+          </div>
+          <div class="row last" onclick="resetDemo()">
+            <div class="row-left"><span class="row-ico">🧪</span><span class="row-title">重置为示例数据</span></div>
+            <div class="row-right"><span class="arrow">›</span></div>
+          </div>
+        </div>
+
+        <div class="version">个人成长进化乐园 · MVP 0.1</div>
+      </div>
+
+      <div class="overlay" id="overlay" onclick="overlayClick(event)">
+        <div class="sheet" id="sheet" onclick="event.stopPropagation()"></div>
+      </div>
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <div class="tabbar" id="tabbar">
+      <button class="tab on" data-tab="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.2 10.6 12 3.4l8.8 7.2"/><path d="M5.6 9.6V20h12.8V9.6"/><path d="M9.8 20v-4.6h4.4V20"/></svg>
+        <span>首页</span>
+      </button>
+      <button class="tab" data-tab="tasks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4.2"/><path d="m8 12.2 2.6 2.6L16.2 9"/></svg>
+        <span>成长任务</span>
+      </button>
+      <button class="tab" data-tab="ability">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.1"/><circle cx="5" cy="19.2" r="1.9"/><circle cx="19" cy="19.2" r="1.9"/><path d="M12 6.7v3.6"/><path d="M5 17.3v-6h14v6"/></svg>
+        <span>能力树</span>
+      </button>
+      <button class="tab" data-tab="achv">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.4" r="4.7"/><circle cx="12" cy="9.4" r="1.3"/><path d="M8.5 13.6 7 21l5-2.6L17 21l-1.5-7.4"/></svg>
+        <span>成就徽章</span>
+      </button>
+      <button class="tab" data-tab="profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20c0-4 3.2-6.4 7.2-6.4S19.2 16 19.2 20"/></svg>
+        <span>我的</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="stage-foot">
+  <span>5 个页面 · 可交互原型</span>
+  <button class="reset" onclick="resetDemo()">重置演示数据</button>
+</div>
+
+<script>
+/* ================= 数据 ================= */
+const ABILITIES = [
+  { key:'learn',   name:'学习力', emoji:'📚', color:'#4c86f5', bg:'#ebf2ff', desc:'输入、理解并沉淀知识', advice:'每天固定 30 分钟阅读，读完写 1 张知识卡片。' },
+  { key:'focus',   name:'专注力', emoji:'🎯', color:'#8b6bf2', bg:'#f1ecff', desc:'在一件事上深度停留', advice:'用 25 分钟番茄钟开启，先关掉非必要通知。' },
+  { key:'health',  name:'健康力', emoji:'🌿', color:'#16b98d', bg:'#e6f8f1', desc:'身体与精力的底盘',   advice:'每天 20 分钟中低强度运动，23:30 前入睡。' },
+  { key:'emotion', name:'情绪力', emoji:'☀️', color:'#f0a02a', bg:'#fff5e3', desc:'识别、接纳并调节情绪', advice:'睡前记录 3 件小确幸，给情绪一个出口。' },
+  { key:'action',  name:'行动力', emoji:'⚡', color:'#f0724e', bg:'#ffede7', desc:'把想法变成真实结果', advice:'拖延的事先做 5 分钟，启动比完美更重要。' },
+  { key:'social',  name:'社交力', emoji:'🤝', color:'#26a8c9', bg:'#e6f6fb', desc:'连接他人、被理解与支持', advice:'每周主动联系 1 位朋友，给出一次具体赞美。' }
+];
+
+const TASKS = [
+  { id:'read30',     title:'阅读 30 分钟',           ability:'learn',   growth:15, minutes:30, diff:2, emoji:'📖' },
+  { id:'card',       title:'写一张知识卡片',          ability:'learn',   growth:10, minutes:10, diff:1, emoji:'🗂' },
+  { id:'diary',      title:'完成今日复盘日记',        ability:'learn',   growth:10, minutes:10, diff:1, emoji:'✍️' },
+  { id:'pomodoro',   title:'番茄钟专注 25 分钟',      ability:'focus',   growth:15, minutes:25, diff:2, emoji:'🍅' },
+  { id:'deep90',     title:'深度工作 90 分钟',        ability:'focus',   growth:25, minutes:90, diff:3, emoji:'🎧' },
+  { id:'phone',      title:'手机远离工作台 1 小时',    ability:'focus',   growth:12, minutes:60, diff:2, emoji:'📵' },
+  { id:'run20',      title:'快走或慢跑 20 分钟',       ability:'health',  growth:15, minutes:20, diff:2, emoji:'🏃' },
+  { id:'stretch',    title:'拉伸放松 10 分钟',        ability:'health',  growth:8,  minutes:10, diff:1, emoji:'🧘' },
+  { id:'sleep',      title:'23:30 前上床睡觉',        ability:'health',  growth:10, minutes:5,  diff:1, emoji:'🌙' },
+  { id:'gratitude',  title:'记录 3 件小确幸',         ability:'emotion', growth:10, minutes:5,  diff:1, emoji:'🌤' },
+  { id:'breathe',    title:'3 分钟呼吸练习',          ability:'emotion', growth:8,  minutes:3,  diff:1, emoji:'🫧' },
+  { id:'mood',       title:'写一段情绪日记',          ability:'emotion', growth:12, minutes:8,  diff:2, emoji:'💭' },
+  { id:'first5',     title:'做掉一件拖延的事',        ability:'action',  growth:20, minutes:15, diff:2, emoji:'⚡' },
+  { id:'three',      title:'写下今日最重要的三件事',   ability:'action',  growth:8,  minutes:3,  diff:1, emoji:'📌' },
+  { id:'declutter',  title:'断舍离一个角落',          ability:'action',  growth:12, minutes:15, diff:2, emoji:'🧹' },
+  { id:'reachout',   title:'主动联系一位朋友',        ability:'social',  growth:10, minutes:5,  diff:1, emoji:'💬' },
+  { id:'praise',     title:'给一个人具体的赞美',      ability:'social',  growth:8,  minutes:2,  diff:1, emoji:'🌻' },
+  { id:'listen',     title:'认真听完一次倾诉',        ability:'social',  growth:12, minutes:10, diff:2, emoji:'👂' }
+];
+
+const BADGES = [
+  { id:'first_step',  name:'初次进化',   emoji:'🌱', color:'#2ecfa6', desc:'完成第 1 个成长任务',              check: s => s.completedCount >= 1 },
+  { id:'streak3',     name:'三日不辍',   emoji:'🔥', color:'#f0724e', desc:'连续 3 天完成任务',                check: s => s.streak >= 3 },
+  { id:'streak7',     name:'七日成诗',   emoji:'🌟', color:'#f0a02a', desc:'连续 7 天完成任务',                check: s => s.streak >= 7 },
+  { id:'level5',      name:'五级进化者', emoji:'👑', color:'#8b6bf2', desc:'成长等级达到 Lv.5',                check: s => s.level >= 5 },
+  { id:'growth1000',  name:'千点里程碑', emoji:'🏅', color:'#16b98d', desc:'累计成长值达到 1000',              check: s => s.totalGrowth >= 1000 },
+  { id:'allround',    name:'六维觉醒',   emoji:'🧬', color:'#26a8c9', desc:'六项能力全部达到 Lv.2',            check: s => ABILITIES.every(a => s.abilities[a.key].level >= 2) },
+  { id:'focus10',     name:'专注达人',   emoji:'🎯', color:'#4c86f5', desc:'完成 10 个专注力任务',             check: s => (s.abilityDone.focus || 0) >= 10 },
+  { id:'early_bird',  name:'晨间进化',   emoji:'☀️', color:'#f5b93f', desc:'在早上 8 点前完成一个任务',        check: s => !!s.flags.earlyBird },
+  { id:'night_owl',   name:'深夜思考者', emoji:'🌙', color:'#6c7bf0', desc:'在 23 点后完成一个任务',           check: s => !!s.flags.nightOwl },
+  { id:'perfect_day', name:'完美一天',   emoji:'💎', color:'#22b8cf', desc:'一天内完成全部今日任务',           check: s => s.perfectDays >= 1 },
+  { id:'collector',   name:'徽章收藏家', emoji:'🧩', color:'#b07bf2', desc:'解锁 5 枚徽章',                    check: () => false },
+  { id:'hundred',     name:'百日进化',   emoji:'🚀', color:'#12a97f', desc:'累积活跃 100 天',                  check: s => s.daysActive >= 100 }
+];
+
+const QUOTES = [
+  '微小持续，就是进化的力量。',
+  '你不必很快，只要一直在长。',
+  '今天的一小步，是明天的能力基线。',
+  '进化不是突变，而是每天多 1%。',
+  '完成比完美更重要。',
+  '专注一小时，胜过忙碌一整天。',
+  '身体是所有能力的地基。',
+  '情绪稳定，是一种高级的战斗力。'
+];
+
+const DIFF = { 1:'轻松', 2:'适中', 3:'挑战' };
+const WEEK_CN = ['日','一','二','三','四','五','六'];
+const LEVEL_TITLES = [[10,'乐园守护者'],[7,'高阶进化者'],[5,'进阶进化者'],[3,'进化者'],[1,'新手进化者']];
+
+/* ================= 工具 ================= */
+const $ = sel => document.querySelector(sel);
+const pad = n => (n < 10 ? '0' + n : '' + n);
+const dayKey = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const todayKey = () => dayKey(new Date());
+function dayBefore(n){ const d = new Date(); d.setDate(d.getDate() - n); return dayKey(d); }
+function pretty(dateKey){ const p = dateKey.split('-'); return Number(p[1]) + '月' + Number(p[2]) + '日'; }
+function levelTitle(lv){ for (const [min, t] of LEVEL_TITLES) if (lv >= min) return t; return '新手进化者'; }
+function taskOf(id){ return TASKS.find(t => t.id === id); }
+function abilityOf(key){ return ABILITIES.find(a => a.key === key); }
+function hexA(hex, a){
+  const h = hex.replace('#','');
+  return 'rgba(' + parseInt(h.slice(0,2),16) + ',' + parseInt(h.slice(2,4),16) + ',' + parseInt(h.slice(4,6),16) + ',' + a + ')';
+}
+
+/* ================= 状态 ================= */
+let state;
+let view = { tab:'home', filter:'all' };
+
+function createState(){
+  const base = [32, 40, 18, 45, 36, 22];
+  const history = [];
+  for (let i = 6; i >= 1; i--) history.push({ date: dayBefore(i), growth: base[6 - i] });
+
+  const s = {
+    nickname:'成长者',
+    level:3,
+    weekGrowth:0,
+    totalGrowth:1880,
+    streak:5,
+    bestStreak:7,
+    daysActive:21,
+    joinDate:dayBefore(21),
+    completedCount:34,
+    perfectDays:0,
+    abilities:{
+      learn:{ level:2, exp:62 }, focus:{ level:1, exp:48 }, health:{ level:2, exp:80 },
+      emotion:{ level:1, exp:33 }, action:{ level:1, exp:55 }, social:{ level:1, exp:20 }
+    },
+    abilityDone:{ learn:9, focus:6, health:8, emotion:3, action:5, social:2 },
+    flags:{ earlyBird:true, nightOwl:false },
+    settings:{ remind:true, time:'20:30' },
+    todayTasks:[
+      { id:'read30', done:true }, { id:'pomodoro', done:true }, { id:'run20', done:false },
+      { id:'gratitude', done:false }, { id:'first5', done:false }
+    ],
+    history: history,
+    badgeMap:{ first_step:dayBefore(20), streak3:dayBefore(13), growth1000:dayBefore(4), early_bird:dayBefore(9) }
+  };
+  addHistory(s, s.todayTasks.filter(t => t.done).reduce((sum,t) => sum + taskOf(t.id).growth, 0));
+  s.weekGrowth = s.history.reduce((sum,h) => sum + h.growth, 0);
+  return s;
+}
+
+function addHistory(s, growth){
+  const today = todayKey();
+  let h = s.history.find(x => x.date === today);
+  if (!h){ h = { date: today, growth: 0 }; s.history.push(h); }
+  h.growth += growth;
+  s.history = s.history.slice(-30);
+}
+
+function resetDemo(){
+  state = createState();
+  view = { tab:'home', filter:'all' };
+  closeModal();
+  renderAll();
+  toast('已重置为示例数据');
+}
+
+/* ================= 结算 ================= */
+function pct(){ return Math.min(100, Math.round(state.weekGrowth / 500 * 100)); }
+function doneCount(){ return state.todayTasks.filter(t => t.done).length; }
+function todayGrowth(){ return state.todayTasks.filter(t => t.done).reduce((s,t) => s + taskOf(t.id).growth, 0); }
+
+function syncBadges(){
+  const ids = [];
+  BADGES.forEach(b => { if (b.id !== 'collector' && b.check(state)) ids.push(b.id); });
+  if (ids.length >= 5) ids.push('collector');
+  const added = [];
+  ids.forEach(id => { if (!state.badgeMap[id]){ state.badgeMap[id] = todayKey(); added.push(id); } });
+  return added.map(id => BADGES.find(b => b.id === id)).filter(Boolean);
+}
+
+function completeTask(id){
+  const item = state.todayTasks.find(t => t.id === id);
+  if (!item || item.done) return;
+  const task = taskOf(id);
+  item.done = true;
+
+  state.completedCount++;
+  state.totalGrowth += task.growth;
+  state.weekGrowth += task.growth;
+  state.abilityDone[task.ability] = (state.abilityDone[task.ability] || 0) + 1;
+
+  const ab = state.abilities[task.ability];
+  ab.exp += task.growth;
+  let abUp = false;
+  while (ab.exp >= 100 && ab.level < 10){ ab.exp -= 100; ab.level++; abUp = true; }
+
+  addHistory(state, task.growth);
+  if (state.todayTasks.every(t => t.done)) state.perfectDays++;
+
+  let levelUp = false;
+  while (state.weekGrowth >= 500){ state.weekGrowth -= 500; state.level++; levelUp = true; }
+
+  const newBadges = syncBadges();
+  renderAll();
+  showReward({ growth: task.growth, title: task.title, ability: abilityOf(task.ability).name, levelUp, level: state.level, badges: newBadges, abUp, abName: abilityOf(task.ability).name, abLevel: ab.level });
+}
+
+function shuffleTasks(){
+  if (doneCount() === state.todayTasks.length){ toast('今天的任务已全部完成，明天见 👋'); return; }
+  const done = state.todayTasks.filter(t => t.done);
+  const pool = TASKS.filter(t => !done.some(d => d.id === t.id)).sort(() => Math.random() - 0.5);
+  state.todayTasks = done.concat(pool.slice(0, 5 - done.length).map(t => ({ id:t.id, done:false })));
+  renderAll();
+  toast('已为你换一批任务');
+}
+
+/* ================= 渲染 ================= */
+function renderTabbar(){
+  document.querySelectorAll('.tab').forEach(el => {
+    el.classList.toggle('on', el.dataset.tab === view.tab);
+  });
+  const titles = { home:'个人成长进化乐园', tasks:'成长任务', ability:'能力树', achv:'成就徽章', profile:'我的' };
+  $('#navTitle').textContent = titles[view.tab];
+  document.querySelectorAll('.screen').forEach(el => {
+    el.classList.toggle('active', el.dataset.screen === view.tab);
+  });
+}
+
+function renderHome(){
+  $('#homeName').textContent = state.nickname;
+  $('#homeLevel').textContent = state.level;
+  $('#homePct').textContent = pct();
+  $('#homeBar').style.width = pct() + '%';
+  $('#homeWeek').textContent = state.weekGrowth + ' / 500';
+  $('#quoteText').textContent = QUOTES[new Date().getDate() % QUOTES.length];
+  $('#quoteDate').textContent = '进化乐园 · ' + pretty(todayKey());
+  $('#homeStreak').textContent = state.streak;
+  $('#homeStreakHint').textContent = state.streak >= 7 ? '已经连续 7 天，节奏保持得不错' : '再坚持 ' + (7 - state.streak) + ' 天解锁「七日成诗」';
+
+  const remaining = state.todayTasks.length - doneCount();
+  const dot = $('#entryDot');
+  dot.textContent = remaining;
+  dot.style.display = remaining > 0 ? 'block' : 'none';
+
+  const undone = state.todayTasks.filter(t => !t.done).slice(0, 3);
+  const list = (undone.length ? undone : state.todayTasks.slice(0, 3)).map(item => {
+    const t = taskOf(item.id), ab = abilityOf(t.ability);
+    return `
+      <div class="todo-item">
+        <div class="check ${item.done ? 'on' : ''}" onclick="completeTask('${t.id}')">${item.done ? '✓' : ''}</div>
+        <div class="todo-main">
+          <div class="todo-title ${item.done ? 'done' : ''}">${t.title}</div>
+          <div class="todo-meta">${ab.name} · ${t.minutes} 分钟</div>
+        </div>
+        <div class="todo-growth">+${t.growth}<span>成长值</span></div>
+      </div>`;
+  }).join('');
+  $('#homeTodo').innerHTML = list || '<div class="empty">今天还没有任务，去任务页看看</div>';
+}
+
+function renderTasks(){
+  const total = state.todayTasks.length, done = doneCount(), growth = todayGrowth();
+  $('#taskSub').textContent = pretty(todayKey()) + ' · 完成 ' + done + '/' + total;
+  $('#taskDone').textContent = done;
+  $('#taskTotal').textContent = total;
+  $('#taskGrowth').textContent = '+' + growth;
+  $('#taskBar').style.width = (total ? Math.round(done / total * 100) : 0) + '%';
+  $('#taskTip').textContent = done === total ? '今日任务全部完成，进化达成 🎉 明天继续保持' : '完成今日全部任务，额外解锁 +20 成长值';
+
+  const filters = [{ key:'all', name:'全部' }].concat(ABILITIES.map(a => ({ key:a.key, name:a.name })));
+  $('#chips').innerHTML = filters.map(f =>
+    `<div class="chip ${view.filter === f.key ? 'on' : ''}" onclick="setFilter('${f.key}')">${f.name}</div>`
+  ).join('');
+
+  const list = state.todayTasks.filter(item => view.filter === 'all' || taskOf(item.id).ability === view.filter);
+  $('#taskList').innerHTML = list.length ? list.map(item => {
+    const t = taskOf(item.id), ab = abilityOf(t.ability);
+    return `
+      <div class="task ${item.done ? 'done' : ''}">
+        <div class="task-ico" style="background:${ab.bg}">${t.emoji}</div>
+        <div class="task-main">
+          <div class="task-title">${t.title}</div>
+          <div class="task-meta">
+            <span class="tag" style="color:${ab.color};background:${ab.bg}">${ab.name}</span>
+            <span class="dot">·</span><span>${t.minutes} 分钟</span>
+            <span class="dot">·</span><span>${DIFF[t.diff]}</span>
+          </div>
+        </div>
+        <div class="task-action ${item.done ? 'done' : ''}" onclick="completeTask('${t.id}')">
+          ${item.done ? '✓ 已完成' : '+' + t.growth}
+        </div>
+      </div>`;
+  }).join('') : '<div class="empty">这个维度今天没有任务，换个筛选看看</div>';
+}
+
+function renderAbility(){
+  const nodes = ABILITIES.map((a, i) => {
+    const ab = state.abilities[a.key];
+    const pos = [
+      'left:0; top:116px', 'left:140px; top:116px', 'right:0; top:116px',
+      'left:0; top:208px', 'left:140px; top:208px', 'right:0; top:208px'
+    ][i];
+    return `
+      <div class="node" style="${pos}" onclick="scrollToAbility('${a.key}')">
+        <div class="node-circle" style="background:${a.bg}">
+          ${a.emoji}
+          <div class="node-lv" style="background:${a.color}">Lv.${ab.level}</div>
+        </div>
+        <div class="node-name">${a.name}</div>
+      </div>`;
+  }).join('');
+  $('#tree').innerHTML = `
+    <div class="core" onclick="go('home')">
+      <div class="core-ring"><div class="core-inner">
+        <div class="core-lv">Lv.${state.level}</div><div class="core-label">核心</div>
+      </div></div>
+    </div>
+    <div class="trunk"></div><div class="hline"></div>
+    <div class="vline" style="left:39px; top:100px; height:16px"></div>
+    <div class="vline" style="left:178px; top:100px; height:16px"></div>
+    <div class="vline" style="left:318px; top:100px; height:16px"></div>
+    <div class="vline" style="left:39px; top:186px; height:22px"></div>
+    <div class="vline" style="left:178px; top:186px; height:22px"></div>
+    <div class="vline" style="left:318px; top:186px; height:22px"></div>
+    ${nodes}`;
+
+  $('#abilityList').innerHTML = ABILITIES.map(a => {
+    const ab = state.abilities[a.key];
+    return `
+      <div class="ab-card" id="ab-${a.key}">
+        <div class="ab-top">
+          <div class="ab-ico" style="background:${a.bg}">${a.emoji}</div>
+          <div class="ab-main">
+            <div class="ab-name-row">
+              <span class="ab-name">${a.name}</span>
+              <span class="ab-lv" style="color:${a.color};background:${a.bg}">Lv.${ab.level}</span>
+            </div>
+            <div class="ab-desc">${a.desc} · 已完成 ${state.abilityDone[a.key] || 0} 次训练</div>
+          </div>
+        </div>
+        <div class="ab-bar"><div class="ab-fill" style="width:${ab.exp}%;background:${a.color}"></div></div>
+        <div class="ab-foot"><span>${ab.exp} / 100 经验</span><span>距 Lv.${ab.level + 1} 还差 ${100 - ab.exp}</span></div>
+        <div class="ab-advice"><span>💡</span><span>${a.advice}</span></div>
+      </div>`;
+  }).join('');
+}
+
+function renderAchv(){
+  const unlocked = BADGES.filter(b => state.badgeMap[b.id]).length;
+  $('#achvSub').textContent = `已收集 ${unlocked} / ${BADGES.length} 枚 · 每一枚都是走过来的证据`;
+  $('#achvCount').textContent = unlocked;
+  $('#achvTotal').textContent = BADGES.length;
+  $('#achvBar').style.width = Math.round(unlocked / BADGES.length * 100) + '%';
+
+  $('#badgeWall').innerHTML = BADGES.map(b => {
+    const on = !!state.badgeMap[b.id];
+    return `
+      <div class="badge" onclick="openBadge('${b.id}')">
+        <div class="badge-ico ${on ? '' : 'locked'}" style="${on ? 'background:' + hexA(b.color, .16) + ';border-color:' + b.color : ''}">
+          <span class="emo">${b.emoji}</span>
+          ${on ? `<div class="badge-check" style="background:${b.color}">✓</div>` : ''}
+        </div>
+        <div class="badge-name ${on ? '' : 'off'}">${b.name}</div>
+      </div>`;
+  }).join('');
+
+  const ms = [
+    { name:'成为 Lv.5 进化者', cur: state.level, target: 5 },
+    { name:'连续进化 7 天', cur: state.streak, target: 7 },
+    { name:'累计完成 100 个任务', cur: state.completedCount, target: 100 },
+    { name:'收集 8 枚徽章', cur: unlocked, target: 8 },
+    { name:'累计 5000 成长值', cur: state.totalGrowth, target: 5000 }
+  ];
+  $('#milestones').innerHTML = ms.map((m, i) => {
+    const p = Math.min(100, Math.round(m.cur / m.target * 100)), ok = m.cur >= m.target;
+    return `
+      <div class="mile">
+        <div class="mile-rail">
+          <div class="mile-dot ${ok ? 'on' : ''}">${ok ? '✓' : ''}</div>
+          ${i < ms.length - 1 ? '<div class="mile-line"></div>' : ''}
+        </div>
+        <div class="mile-main">
+          <div class="mile-row"><span class="mile-name">${m.name}</span><span class="mile-val ${ok ? 'on' : ''}">${m.cur} / ${m.target}</span></div>
+          <div class="mile-bar"><div class="mile-fill ${ok ? 'on' : ''}" style="width:${p}%"></div></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderProfile(){
+  const unlocked = BADGES.filter(b => state.badgeMap[b.id]).length;
+  $('#avatarChar').textContent = (state.nickname || '成').slice(0, 1);
+  $('#profName').textContent = state.nickname;
+  $('#profSub').textContent = levelTitle(state.level) + ' · 加入进化乐园 ' + state.daysActive + ' 天';
+  $('#profLevel').textContent = state.level;
+  $('#statGrowth').textContent = state.totalGrowth;
+  $('#statDone').textContent = state.completedCount;
+  $('#statStreak').textContent = state.streak;
+  $('#statBadge').textContent = unlocked;
+  $('#statBest').textContent = state.bestStreak;
+  $('#statPerfect').textContent = state.perfectDays;
+  $('#statJoin').textContent = '开始于 ' + state.joinDate;
+  $('#remindSwitch').classList.toggle('on', state.settings.remind);
+
+  const week = state.history.slice(-7);
+  const max = Math.max.apply(null, week.map(h => h.growth).concat([40]));
+  $('#weekTotal').textContent = week.reduce((s,h) => s + h.growth, 0);
+  $('#chart').innerHTML = week.map(h => {
+    const parts = h.date.split('-');
+    const dow = WEEK_CN[new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])).getDay()];
+    const isToday = h.date === todayKey();
+    const height = Math.max(7, Math.round(h.growth / max * 100));
+    return `<div class="bar-col">
+      <div class="bar-wrap"><div class="bar ${isToday ? 'on' : ''}" style="height:${height}%"></div></div>
+      <div class="bar-label ${isToday ? 'on' : ''}">${dow}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderTabbar();
+  renderHome();
+  renderTasks();
+  renderAbility();
+  renderAchv();
+  renderProfile();
+}
+
+/* ================= 交互 ================= */
+function go(tab){
+  view.tab = tab;
+  renderTabbar();
+  const el = document.querySelector('.screen.active');
+  if (el) el.scrollTop = 0;
+}
+
+function setFilter(key){ view.filter = key; renderTasks(); }
+
+function scrollToAbility(key){
+  const el = document.getElementById('ab-' + key);
+  const screen = document.querySelector('.screen.active');
+  if (el && screen) screen.scrollTo({ top: el.offsetTop - 8, behavior:'smooth' });
+}
+
+let toastTimer = null;
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 1700);
+}
+
+function openModal(html){
+  $('#sheet').innerHTML = html;
+  $('#overlay').classList.add('show');
+}
+function closeModal(){ $('#overlay').classList.remove('show'); }
+function overlayClick(e){ if (e.target.id === 'overlay') closeModal(); }
+
+function showReward(r){
+  const tags = [`<span class="rt">${r.ability} 经验 +${r.growth}</span>`];
+  if (r.abUp) tags.push(`<span class="rt mint">${r.abName} 升到 Lv.${r.abLevel}</span>`);
+  if (r.levelUp) tags.push(`<span class="rt mint">等级提升 · Lv.${r.level}</span>`);
+  r.badges.forEach(b => tags.push(`<span class="rt gold">解锁徽章「${b.name}」</span>`));
+  openModal(`
+    <div class="emoji">✨</div>
+    <div class="reward-growth">+${r.growth}</div>
+    <div class="reward-unit">成长值</div>
+    <div class="reward-line">「${r.title}」已完成</div>
+    <div class="reward-tags">${tags.join('')}</div>
+    <div class="btn-main" onclick="closeModal()">继续进化</div>
+  `);
+}
+
+function openBadge(id){
+  const b = BADGES.find(x => x.id === id);
+  const on = !!state.badgeMap[id];
+  openModal(`
+    <div class="d-ico" style="${on ? 'background:' + hexA(b.color, .16) + ';border-color:' + b.color : ''}">
+      <span style="${on ? '' : 'opacity:.3'}">${b.emoji}</span>
+    </div>
+    <div class="d-name">${b.name}</div>
+    <div class="d-state ${on ? 'on' : ''}">${on ? '已解锁 · ' + state.badgeMap[id] : '尚未解锁'}</div>
+    <div class="d-desc">${b.desc}</div>
+    <div class="btn-main" onclick="${on ? 'closeModal()' : "closeModal();go('tasks')"}">${on ? '收下这枚徽章' : '去做今日任务'}</div>
+  `);
+}
+
+function openRename(){
+  openModal(`
+    <div class="d-name" style="margin-top:2px">修改昵称</div>
+    <input class="name-input" id="nameInput" maxlength="12" value="${state.nickname}" />
+    <div class="btn-main" onclick="saveName()">保存</div>
+  `);
+  setTimeout(() => { const el = $('#nameInput'); if (el){ el.focus(); el.select(); } }, 60);
+}
+
+function saveName(){
+  const v = ($('#nameInput').value || '').trim();
+  if (!v){ toast('昵称不能为空'); return; }
+  state.nickname = v.slice(0, 12);
+  closeModal();
+  renderAll();
+  toast('昵称已更新');
+}
+
+function toggleRemind(){
+  state.settings.remind = !state.settings.remind;
+  $('#remindSwitch').classList.toggle('on', state.settings.remind);
+  toast(state.settings.remind ? '每日提醒已开启' : '每日提醒已关闭');
+}
+
+document.querySelectorAll('.tab').forEach(el => {
+  el.addEventListener('click', () => go(el.dataset.tab));
+});
+
+/* 适配窗口高度 */
+function fit(){
+  const wrap = $('#phoneWrap');
+  const avail = window.innerHeight - 150;
+  const scale = Math.min(1, avail / 862);
+  wrap.style.transform = 'scale(' + scale + ')';
+  wrap.style.height = (862 * scale) + 'px';
+  wrap.style.marginBottom = (862 * scale - 862) + 'px';
+}
+window.addEventListener('resize', fit);
+
+/* 启动 */
+state = createState();
+const hash = (location.hash || '').replace('#', '');
+if (['home', 'tasks', 'ability', 'achv', 'profile'].indexOf(hash) > -1) view.tab = hash;
+renderAll();
+fit();
+</script>
+</body>
+</html>

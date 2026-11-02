@@ -38,13 +38,12 @@ Page({
       Object.assign({}, b, { tint: rgba(b.color, 0.16) })
     );
 
-    const s = vm.state;
     const milestones = [
       { name: '成为 Lv.5 进化者', cur: vm.level, target: 5 },
-      { name: '连续进化 7 天', cur: s.streak, target: 7 },
-      { name: '累计完成 100 个任务', cur: s.completedCount, target: 100 },
+      { name: '连续进化 7 天', cur: vm.streak, target: 7 },
+      { name: '累计完成 100 个任务', cur: vm.completedCount, target: 100 },
       { name: '收集 8 枚徽章', cur: vm.unlockedCount, target: 8 },
-      { name: '累计 5000 成长值', cur: s.totalGrowth, target: 5000 }
+      { name: '累计 5000 成长值', cur: vm.totalGrowth, target: 5000 }
     ].map((m) =>
       Object.assign(m, {
         percent: Math.min(100, Math.round((m.cur / m.target) * 100)),

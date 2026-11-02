@@ -4,6 +4,7 @@
  */
 
 const LEVEL_STEP = 500; // 每级所需成长值（本周成长值达到 500 即升级）
+const DAILY_TASK_COUNT = 8;
 
 const ABILITIES = [
   {
@@ -205,6 +206,7 @@ const LEVEL_TITLES = [
   { min: 3, title: '进化者' },
   { min: 5, title: '进阶进化者' },
   { min: 7, title: '高阶进化者' },
+  { min: 8, title: '坚持者' },
   { min: 10, title: '乐园守护者' }
 ];
 
@@ -256,25 +258,40 @@ function seededShuffle(list, seed) {
   return arr;
 }
 
-/** 每日任务：六维各挑 1 项，取前 5 项，保证能力覆盖 */
+/** 每日任务：六维各 1 项，不足数量时从任务库补足 */
 function buildDailyTasks(dateKey, count) {
-  const total = count || 5;
+  const total = count || DAILY_TASK_COUNT;
   const seed = hash('eden-' + dateKey);
   const abilityOrder = seededShuffle(ABILITIES, seed).map((a) => a.key);
   const picked = [];
+  const used = new Set();
   abilityOrder.forEach((key) => {
     if (picked.length >= total) return;
     const pool = seededShuffle(
       TASK_LIB.filter((t) => t.ability === key),
       seed + key.length
     );
-    if (pool[0]) picked.push(pool[0].id);
+    if (pool[0] && !used.has(pool[0].id)) {
+      picked.push(pool[0].id);
+      used.add(pool[0].id);
+    }
   });
+  if (picked.length < total) {
+    seededShuffle(
+      TASK_LIB.filter((t) => !used.has(t.id)),
+      seed + 97
+    ).forEach((t) => {
+      if (picked.length >= total) return;
+      picked.push(t.id);
+      used.add(t.id);
+    });
+  }
   return picked;
 }
 
 module.exports = {
   LEVEL_STEP,
+  DAILY_TASK_COUNT,
   ABILITIES,
   TASK_LIB,
   QUOTES,
@@ -284,6 +301,7 @@ module.exports = {
   getTask,
   levelTitle,
   dayKey,
+  hash,
   buildDailyTasks,
   seededShuffle
 };
