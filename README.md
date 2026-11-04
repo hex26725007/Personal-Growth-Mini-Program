@@ -22,12 +22,11 @@
 
 ## 预览 | Preview
 
-| 头像方案 A | 头像方案 B（乐园） |
-|:---:|:---:|
-| ![Avatar](growth-eden/miniprogram/assets/growth-eden-avatar.jpg) | ![Avatar Paradise](growth-eden/miniprogram/assets/growth-eden-avatar-paradise.jpg) |
+| 首页 | 能力进化树 | 成就徽章 |
+|:---:|:---:|:---:|
+| ![首页](docs/screenshots/home.jpg) | ![能力树](docs/screenshots/ability.jpg) | ![成就徽章](docs/screenshots/achievements.jpg) |
 
-> 真机效果：微信开发者工具 → 导入本项目 → **编译** → **预览** 扫码。  
-> 更多界面请本地运行后截图补充至本 README。
+> 真机效果：微信开发者工具 → 导入本项目 → **编译** → **预览** 扫码。
 
 ---
 
